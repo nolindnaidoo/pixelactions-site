@@ -4,8 +4,8 @@
       "staticDistDir": "./out",
       "url": [
         "http://localhost/index.html",
-        "http://localhost/vs/pixelsnap.html",
-        "http://localhost/how-to/pixel-coordinates.html"
+        "http://localhost/vs/pyautogui.html",
+        "http://localhost/how-to/automate-desktop-clicks.html"
       ],
       "numberOfRuns": 1
     },
