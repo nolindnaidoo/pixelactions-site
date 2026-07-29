@@ -44,8 +44,7 @@ export function PlatformTable() {
         </table>
       </div>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        Nothing here is published yet — no crates.io release, no binaries. This table is kept honest
-        — claims match runs.
+        No crate or binaries are published yet. This table is kept honest — claims match runs.
       </p>
     </section>
   )

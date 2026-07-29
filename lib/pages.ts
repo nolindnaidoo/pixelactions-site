@@ -50,7 +50,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     path: '/vs/sikulix',
     title: 'pixelactions vs SikuliX',
     description:
-      'SikuliX sees and acts inside one JVM runtime. pixelactions splits the loop: a human marks ground truth in pixelcoords, then a small native binary executes flows with relocation, bounds checks, verification, and exit codes — no JVM, no scripting language.',
+      'SikuliX sees and acts inside one JVM runtime. pixelactions splits the loop: a human marks ground truth in pixelcoords, then a small native binary executes flows with relocation, verification, and exit codes — no JVM, no scripting language.',
     headline: 'pixelactions vs SikuliX',
     navLabel: 'vs SikuliX',
     ogKicker: 'comparison',

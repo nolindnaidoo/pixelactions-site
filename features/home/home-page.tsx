@@ -20,7 +20,7 @@ pixelactions plan --session <dir> click:email type:"a@b.com" key:enter verify:su
 # every coordinate after conversion, acts on nothing
 
 pixelactions run  --session <dir> click:email type:"a@b.com" key:enter verify:success --yes
-# relocate → bounds check → act → verify;  exit 0 done, 1 failed, 2 malformed, 3 refused
+# relocate → refuse if ambiguous → act → verify;  exit 0 done, 1 failed, 2 malformed, 3 refused
 
 pixelactions serve --session <dir>   # JSON per line on stdin/stdout — any language owns the loop`
 
@@ -78,6 +78,9 @@ export function HomePage() {
           where the click went, not where the session said it would. <code>outcome</code>{' '}
           distinguishes <em>verified</em> from <em>executed</em>: the OS accepting an event is not
           the app reacting to one, and &ldquo;nothing errored&rdquo; is not &ldquo;it worked&rdquo;.
+          The honesty runs deep enough that <code>scroll</code> always reports <em>executed</em>,
+          never <em>verified</em> — it changes its own region on purpose, so confirm it with a{' '}
+          <code>wait_for</code> on whatever it should bring into view.
         </p>
       </section>
       <section className="flex flex-col gap-4">

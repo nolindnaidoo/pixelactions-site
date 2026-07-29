@@ -30,8 +30,8 @@ export function Hero() {
           {TAGLINE}
         </h1>
         <p className="font-mono text-sm text-foreground/70 dark:text-foreground/55">
-          click · double_click · drag · type · key · verify · wait_for · wait_gone · pause — one
-          vocabulary across three surfaces
+          click · double_click · drag · scroll · type · key · verify · wait_for · wait_gone · pause
+          — one vocabulary across three surfaces
         </p>
         <p className="max-w-2xl text-lg leading-8">
           <a
@@ -46,8 +46,8 @@ export function Hero() {
           loop is <span className="font-mono text-base">find → act → assert</span>.
         </p>
         <p className="max-w-2xl font-mono text-sm text-foreground/70 dark:text-foreground/55">
-          Status: early, and macOS only. The loop works end to end; Windows and X11 are next.
-          Nothing here is published yet.
+          Status: early, and macOS only. The loop works end to end; Windows and X11 are next. No
+          crate or binaries are published yet.
         </p>
         <div className="flex flex-wrap gap-4 font-mono text-sm">
           <a

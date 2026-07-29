@@ -23,7 +23,7 @@ const BEATS = [
   {
     step: '03',
     command: 'pixelactions run --flow checkout.toml --yes',
-    line: 'Relocate, bounds-check, act, verify. A target that can’t be found unambiguously refuses before anything is injected.',
+    line: 'Relocate, act, verify. A crop that matches in more than one place produces no correction at all — the run refuses before anything is injected.',
     artifact: `{ "summary": "click submit", "outcome": "verified",
   "elapsed_ms": 412 }   # exit 0`,
   },
@@ -37,7 +37,7 @@ const BEATS = [
   {
     step: '05',
     command: 'echo $?',
-    line: 'Exit codes are the API: 0 done, 1 a step failed, 2 malformed, 3 refused. A failure may be worth retrying; a refusal never is.',
+    line: 'Exit codes are the API: 0 done, 1 a step failed, 2 malformed, 3 refused. Grab the mouse into a screen corner and the run stops — a refusal is never worth retrying.',
     artifact: `refused: cursor in a screen corner — kill switch   # exit 3`,
   },
 ] as const

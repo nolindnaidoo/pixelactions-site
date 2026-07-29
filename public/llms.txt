@@ -2,16 +2,17 @@
 
 > Free, MIT-licensed desktop-automation executor: the second half of the
 > pixelcoords loop. It consumes human-verified coordinates from a
-> pixelcoords session and acts on them — click, double-click, drag, type,
-> key chords, verify, wait_for, wait_gone — referencing regions by label,
-> never by raw coordinate. Every target is re-located against a fresh
-> capture before acting; a target that can't be found unambiguously is
-> refused before anything is injected; results distinguish "executed"
-> from "verified"; exit codes are the API (0 done, 1 failed, 2 malformed,
-> 3 refused). Three surfaces, one implementation: chained argv verbs,
-> TOML flow files, and a JSON line protocol over stdio so a program in
-> any language owns the loop. Status: early, and macOS only — Windows and
-> X11 are next; nothing is published yet.
+> pixelcoords session and acts on them — click, double-click, drag,
+> scroll, type, key chords, verify, wait_for, wait_gone — referencing
+> regions by label, never by raw coordinate. Every target is re-located
+> against a fresh capture before acting; a crop that matches in more
+> than one place stops the run before anything is injected; results
+> distinguish "executed" from "verified"; a cursor slammed into a screen
+> corner kills the run; exit codes are the API (0 done, 1 failed, 2
+> malformed, 3 refused). Three surfaces, one implementation: chained
+> argv verbs, TOML flow files, and a JSON line protocol over stdio so a
+> program in any language owns the loop. Status: early, and macOS only —
+> Windows and X11 are next; no crate or binaries are published yet.
 
 Install: `cargo install pixelactions`, or prebuilt binaries from
 https://github.com/nolindnaidoo/pixelactions/releases

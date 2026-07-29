@@ -24,7 +24,7 @@ export function PyautoguiPage() {
       }
       whenThem={[
         'A quick one-off script you will watch run — reach for the thing every tutorial teaches.',
-        'You need verbs pixelactions does not have yet: scroll, pixel-color reads, screenshots from the same library.',
+        'You need raw reads from the same library — pixel colors, screenshots. pixelactions acts and verifies; it does not expose the capture.',
         'Your stack already speaks it and the runs are supervised — switching has a cost and this is where PyAutoGUI is fine.',
       ]}
       whenUs={[

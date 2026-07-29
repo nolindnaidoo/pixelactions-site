@@ -15,10 +15,10 @@ export function SikulixPage() {
           built in. That integration is the draw, and nothing in this category matches its
           continuous visual search. pixelactions splits the loop instead: a human marks ground truth
           once, in pixelcoords, and a small native binary executes flows against it — every target
-          re-located before acting, bounds-checked, verified after, with exit codes a CI job can
-          gate on. No JVM, no scripting language: your program owns the loop over stdio, in whatever
-          language it is already written. Worth knowing when comparing: SikuliX&apos;s original
-          development was archived in early 2026 and continues under the OculiX fork.
+          re-located before acting, verified after, with exit codes a CI job can gate on. No JVM, no
+          scripting language: your program owns the loop over stdio, in whatever language it is
+          already written. Worth knowing when comparing: SikuliX&apos;s original development was
+          archived in early 2026 and continues under the OculiX fork.
         </p>
       }
       whenThem={[

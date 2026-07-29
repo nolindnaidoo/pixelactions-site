@@ -50,7 +50,7 @@ export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
   price: { value: 'Free', wins: true },
   platforms: {
     value: 'macOS today; Windows and X11 next',
-    note: 'early — nothing published yet',
+    note: 'early — no crate or binaries published yet',
   },
   declarative: {
     value: 'TOML flows + chained argv',
@@ -65,7 +65,7 @@ export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
   relocation: {
     value: 'Every target re-located against a fresh capture before acting',
     wins: true,
-    note: 'refuses when a region is ambiguous or a corrected point leaves its bounds',
+    note: 'a crop that matches in more than one place stops the run — ambiguity is the test, not distance',
   },
   verification: {
     value: 'Distinguishes executed from verified; exit codes 0/1/2/3',
