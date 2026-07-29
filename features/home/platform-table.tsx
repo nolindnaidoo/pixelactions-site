@@ -44,7 +44,7 @@ export function PlatformTable() {
         </table>
       </div>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        No crate or binaries are published yet. This table is kept honest — claims match runs.
+        The macOS binary is published; Windows and X11 are the next milestone. This table is kept honest — claims match runs.
       </p>
     </section>
   )

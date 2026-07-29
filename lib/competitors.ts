@@ -50,7 +50,7 @@ export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
   price: { value: 'Free', wins: true },
   platforms: {
     value: 'macOS today; Windows and X11 next',
-    note: 'early — no crate or binaries published yet',
+    note: 'early — published as v0.1.0',
   },
   declarative: {
     value: 'TOML flows + chained argv',
@@ -71,7 +71,7 @@ export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
     value: 'Distinguishes executed from verified; exit codes 0/1/2/3',
     wins: true,
   },
-  maintenance: { value: 'In active development — v0.1.0, unpublished' },
+  maintenance: { value: 'In active development — v0.1.0 on crates.io' },
   license: { value: 'MIT, open source', wins: true },
 }
 

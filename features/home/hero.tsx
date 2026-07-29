@@ -46,8 +46,8 @@ export function Hero() {
           loop is <span className="font-mono text-base">find → act → assert</span>.
         </p>
         <p className="max-w-2xl font-mono text-sm text-foreground/70 dark:text-foreground/55">
-          Status: early, and macOS only. The loop works end to end; Windows and X11 are next. No
-          crate or binaries are published yet.
+          Status: early, and macOS only. The loop works end to end; Windows and X11 are next.
+          Published as v0.1.0 on crates.io.
         </p>
         <div className="flex flex-wrap gap-4 font-mono text-sm">
           <a
