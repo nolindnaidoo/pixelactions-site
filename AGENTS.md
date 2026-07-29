@@ -1,0 +1,179 @@
+<!-- BEGIN:nextjs-agent-rules -->
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
+<!-- END:nextjs-agent-rules -->
+
+# pixelactions-site — agent guide
+
+Source of truth for working in this repo. If you change a convention, update
+this file in the same change. `CLAUDE.md` carries the repo-specific honesty
+rules; `README.md` carries the page map; **`MAINTENANCE.md` is the runbook —
+every recurring ritual (stamp walk, releases, snapshots, deps, fonts) with
+exact commands.** This file
+adapts the house standards from `~/dev/offensiveedge-web/AGENTS.md` — read
+that document when a convention here is terse; the intent is identical.
+
+## What this repo is
+
+The promo + search site for the pixelactions tool (`~/dev/pixelactions`), at
+**https://pixelactions.dev**. A fully static poster: `output: "export"`, no
+API routes, no server actions, no backend seams, no fetches. Deploy is
+`git push` to `main` → Vercel (deferred: local-only, no remote, until the
+tool publishes). **Six-page cap** (home, three `/vs/`, one
+how-to, one earned spare) and the **claim quarantine** (version-specific
+competitor claims live only in `lib/competitors.ts`, rendered with a dated
+"verified against" stamp; prose argues philosophy) are product rules, not
+suggestions — see README.md.
+
+## Stack snapshot
+
+- **Next.js 16** (App Router) on React 19, static export. `@/*` → repo root.
+- **Components:** HeroUI v3 (`@heroui/react` + `@heroui/styles`, react-aria
+  based) stays available; its styles feed the token layer. **No HeroUI
+  primitive is in use yet** — when one is first needed, create its thin
+  re-export in `ui/` (the seam is created on first use, not up front).
+- **Styling:** Tailwind v4 via PostCSS; tokens in `app/globals.css` only.
+  Variants with `tailwind-variants`, merging with `tailwind-merge`.
+- **Theming:** next-themes (`app/providers.tsx`) toggles `.light`/`.dark` on
+  `<html>`; the header ThemeToggle records an explicit choice, system until
+  then. Both themes must pass axe.
+- **Fonts:** Geist Sans (body) + **JetBrains Mono vendored** (`app/fonts/`,
+  OFL 1.1, from the pixelcoords family scaffold) — the same TTF feeds
+  `next/font/local` and the ImageResponse OG cards.
+- **Lint/format:** **Biome** (`biome.json`) — single quotes, no semicolons,
+  2-space, 100-col, JSX attrs double-quoted. `bun run lint` is the arbiter;
+  `bun run format` fixes. No ESLint.
+- **Tests:** `bun test` + happy-dom + @testing-library (preloaded via
+  `bunfig.toml`/`test-setup.ts`) with jest-axe component tests colocated
+  beside the a11y-bearing components; Playwright (`e2e/*.e2e.ts`, mobile
+  project first) + `@axe-core/playwright` against the served `out/` covering
+  per-page axe in both schemes, keyboard navigation, 320px reflow, the theme
+  toggle, the 404, and SEO furniture.
+- **Package manager:** bun. Never add another lockfile.
+
+## Deliberate deviations from the house doc
+
+- **No Sentry** — a static poster has no runtime surface worth it. The
+  `reportError` seam (`lib/error.ts`) still exists and every catch routes
+  through it, console-only.
+- **No i18n / next-intl** — en-only site, no locale routing.
+- **No `next/image`** — static export; plain `<img>`/`<video>` from
+  `/public` with explicit dimensions.
+- **No backend, no Zod** — there is nothing to parse; if a feature wants a
+  fetch, it doesn't belong on this site.
+- **No-JS visitors get the light theme.** Theming is class-driven
+  (next-themes); `color-scheme` still gives them correct form controls and
+  scrollbars. Accepted progressive-enhancement tradeoff — duplicating every
+  token under a media query is not worth it.
+- **Hex colors are allowed in exactly two places:** ImageResponse files
+  (`app/icon.tsx`, `app/apple-icon.tsx`, `lib/og.tsx` — Satori cannot read
+  CSS custom properties) and the `themeColor`/theme-sync constants that must
+  mirror `globals.css` values as literals. Everywhere else, tokens only.
+- **Naming exceptions:** `og` (Open Graph, the protocol's name) and `coord`
+  (the tool's own "coordinate chip" vocabulary) are allowed like `id`/`url`.
+
+## Architecture
+
+Flat features owning their UI, copy, and tests; routes are shims.
+
+```
+app/            routes (shims), metadata files, fonts, globals.css
+features/       home/ vs/ how-to/ — a feature owns its components + tests
+components/     bespoke shared UI (selection-frame, coord-chip, comparison-table, …)
+ui/             thin @heroui/react re-exports, one file per primitive, created on first use
+lib/            pages.ts (THE page registry — sitemap/footer/404/e2e all render from it)
+                site.ts (canonical URLs/version/theme colors) · competitors.ts (quarantine
+                data) · og.tsx · error.ts
+e2e/            Playwright specs (*.e2e.ts) + page a11y — loops read lib/pages.ts
+```
+
+- **Page-shaped lists are never written twice.** The registry in
+  `lib/pages.ts` feeds the sitemap, footer nav, 404 list, per-page
+  metadata (`pageMetadata`), OG routes, and every e2e loop. A new page is
+  one registry entry plus its route + feature files — see MAINTENANCE.md.
+
+- **Feature code imports HeroUI from `ui/`, never `@heroui/react` directly.**
+  Re-exports stay thin; a wrapper may add a project default, never re-shape
+  the API. (`ui/` does not exist until the first primitive is adopted.)
+- Routes hold only what the segment owns (metadata, the shim render).
+- Features don't import features; shared things get promoted to
+  `components/`/`lib/` when a second consumer appears — not before.
+- No barrels. Colocation by default (`foo.tsx` ↔ `foo.test.tsx`).
+- Server Components by default; `"use client"` only at interactive leaves
+  (HeroUI primitives are client — keep page shells server).
+
+## Code principles
+
+- **Naming:** kebab-case files; PascalCase components; no abbreviations;
+  booleans read as questions; `onX` props / `handleX` implementations.
+- **Control flow:** early returns, no `else`/`else if` chains; ternary on
+  assignment; 3+ case mappings are `as const` lookup tables.
+- **Immutability:** never mutate props/state/args; prefer `readonly`,
+  `as const`.
+- **Errors:** throw where it happens, catch where you can act, never
+  swallow — every catch routes `reportError(error, { source })`. A floating
+  promise without `.catch()` is a bug (the clipboard write included).
+- **No class components.** No god files (~200-line split threshold).
+- **Content truth:** every pixelactions claim must hold for the version in
+  `lib/site.ts` per the tool repo's README / docs — reproduce the hedges,
+  not just the wins. Version-specific competitor claims go in
+  `lib/competitors.ts` ONLY, stamped and dated.
+
+## Styling & theming
+
+- Tailwind via `className`; tokens only in `globals.css` — never hardcode a
+  hex in a component; add a token instead.
+- Vocabulary: `bg-background` (canvas) · `bg-surface` (panel) ·
+  `text-foreground` · borders `border-border-token` · accents
+  `text-preview` / `text-committed` / `text-target` (+ `-dim` washes).
+  Dark mode uses the tool's exact overlay colors; light variants are
+  contrast-tuned — both defined in `globals.css`, flipped by class.
+- **Muted text is the theme-split alpha ramp:** `text-foreground/70
+  dark:text-foreground/55` (or `/65`//`/50`). Below that fails axe on small
+  text.
+- The three brand motifs (selection-frame, coord-chip, HUD panel) are
+  components — reuse them, don't re-draw dashed borders ad hoc.
+- Respect `prefers-reduced-motion` in any animation.
+
+## Mobile-first & a11y
+
+- Base (unprefixed) classes target the smallest screen; `sm:`/`md:` are
+  progressive enhancement. **Never `max-*` walk-backs.** Verify at 360px
+  first — the Playwright mobile project runs first for this reason.
+- `min-h-dvh` over `min-h-screen`. Tap targets ≥44px.
+- One `<main id="main-content">` per page; the skip link in `app/layout.tsx`
+  stays the first focusable. Never remove focus rings (`focus-visible`).
+- Decorative images `alt=""`; meaningful ones real alt text. Both color
+  schemes must pass axe (the e2e specs check each).
+
+## Verification — the definition of done
+
+CI (`.github/workflows/ci.yml`) enforces the full chain on every push and
+PR: lint, typecheck, unit/component tests, static build, the client-JS
+budget (`scripts/check-bundle-budget.ts` — raising it needs a written
+reason), the Playwright e2e/a11y suite including visual-regression
+snapshots (platform-suffixed baselines: macOS generated locally, Linux
+generated on the CI runner; the video is masked), and warn-level
+Lighthouse budgets (`lighthouserc.json`). The mono font ships as a
+latin-subset woff2 (`app/fonts.ts`); the full TTF stays only for OG
+cards.
+Security and cache headers live in `vercel.json` (full CSP is deliberately
+absent — Next's inline scripts would force unsafe-inline; frame-ancestors
+plus the header set covers the static-site risk surface). Run locally:
+
+```bash
+bun run typecheck && bun run lint && bun test && bun run build
+bun run e2e        # serves out/ and runs mobile-first + axe, both schemes
+```
+
+After `build`, `out/` must contain the page HTML, `robots.txt`,
+`sitemap.xml`, and the emitted icon/OG PNGs. A change is done when it is
+tested, linted, honest, and documented where behavior changed (README /
+this file).
+
+## Scope discipline
+
+When the requested change is done, stop. No unrequested components, pages,
+or robustness tweaks. The six-page cap is absolute — a seventh page is a
+product decision, not a PR.

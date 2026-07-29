@@ -1,0 +1,104 @@
+import type { Metadata } from 'next'
+
+// THE page registry — the single source every page-shaped list renders from:
+// sitemap, footer nav, the 404's page list, and all three e2e loops (axe,
+// reflow, seo). Adding the sixth page (the one remaining slot under the cap)
+// is: one entry here, the page + opengraph-image files, darwin snapshots via
+// `bun run snapshots`, linux via the update-snapshots workflow. Nothing else.
+export type SitePage = {
+  readonly path: string
+  /** Document title, used absolute (the layout template is for fallbacks). */
+  readonly title: string
+  readonly description: string
+  /** Substring the page's h1 must contain — asserted by e2e. */
+  readonly headline: string
+  /** Label in the footer nav and the 404 page list. */
+  readonly navLabel: string
+  readonly ogKicker: string
+  readonly ogTitle: string
+  /** Bumped by hand when the page's content changes — feeds the sitemap. */
+  readonly lastModified: string
+  readonly sitemapPriority: number
+}
+
+export const SITE_PAGES: readonly SitePage[] = [
+  {
+    path: '/',
+    title: 'pixelactions — Execute desktop flows from reviewable files: find, act, assert',
+    description:
+      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, three surfaces: chained commands, TOML flow files, a JSON line protocol for any language. Free, MIT. macOS today; Windows and X11 next.',
+    headline: 'Consume human-verified coordinates',
+    navLabel: 'Home',
+    ogKicker: 'pixelactions',
+    ogTitle: 'Consume human-verified coordinates, perform the interaction, confirm it landed',
+    lastModified: '2026-07-29',
+    sitemapPriority: 1,
+  },
+  {
+    path: '/vs/pyautogui',
+    title: 'pixelactions vs PyAutoGUI',
+    description:
+      'PyAutoGUI made screen automation a Python one-liner. pixelactions keeps the coordinates but moves them out of code: labels from a human-marked session, relocation before acting, verification after, exit codes — and a line protocol so any language, Python included, owns the loop.',
+    headline: 'pixelactions vs PyAutoGUI',
+    navLabel: 'vs PyAutoGUI',
+    ogKicker: 'comparison',
+    ogTitle: 'pixelactions vs PyAutoGUI',
+    lastModified: '2026-07-29',
+    sitemapPriority: 0.8,
+  },
+  {
+    path: '/vs/sikulix',
+    title: 'pixelactions vs SikuliX',
+    description:
+      'SikuliX sees and acts inside one JVM runtime. pixelactions splits the loop: a human marks ground truth in pixelcoords, then a small native binary executes flows with relocation, bounds checks, verification, and exit codes — no JVM, no scripting language.',
+    headline: 'pixelactions vs SikuliX',
+    navLabel: 'vs SikuliX',
+    ogKicker: 'comparison',
+    ogTitle: 'pixelactions vs SikuliX',
+    lastModified: '2026-07-29',
+    sitemapPriority: 0.8,
+  },
+  {
+    path: '/vs/autohotkey',
+    title: 'pixelactions vs AutoHotkey',
+    description:
+      'AutoHotkey is the Windows automation institution — a full scripting language. pixelactions is deliberately not a language: a list of steps over human-marked regions, re-located and verified at run time. macOS today, Windows next — an honest comparison.',
+    headline: 'pixelactions vs AutoHotkey',
+    navLabel: 'vs AutoHotkey',
+    ogKicker: 'comparison',
+    ogTitle: 'pixelactions vs AutoHotkey',
+    lastModified: '2026-07-29',
+    sitemapPriority: 0.8,
+  },
+  {
+    path: '/how-to/automate-desktop-clicks',
+    title: 'How to automate mouse clicks and keystrokes on macOS, Windows, and Linux',
+    description:
+      'The built-in way on each OS — cliclick and AppleScript, PowerShell and AutoHotkey, xdotool and ydotool — each with the pitfall that breaks it, and what it takes for a click to keep landing after the UI moves: relocation, verification, exit codes.',
+    headline: 'How to automate mouse clicks',
+    navLabel: 'Automate desktop clicks',
+    ogKicker: 'how-to',
+    ogTitle: 'Automate desktop clicks on macOS, Windows, and Linux',
+    lastModified: '2026-07-29',
+    sitemapPriority: 0.9,
+  },
+] as const
+
+export function pageByPath(path: string): SitePage {
+  const found = SITE_PAGES.find(entry => entry.path === path)
+  if (found === undefined) throw new Error(`unknown page: ${path} — add it to lib/pages.ts`)
+  return found
+}
+
+/** Per-page Metadata from the registry — canonical, OG, and twitter card
+ *  in one place so a new page cannot forget any of them. */
+export function pageMetadata(path: string): Metadata {
+  const page = pageByPath(path)
+  return {
+    title: { absolute: page.title },
+    description: page.description,
+    alternates: { canonical: page.path },
+    openGraph: { type: 'website', url: page.path },
+    twitter: { card: 'summary_large_image' },
+  }
+}

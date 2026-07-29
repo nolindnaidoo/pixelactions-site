@@ -1,0 +1,44 @@
+# pixelactions
+
+> Free, MIT-licensed desktop-automation executor: the second half of the
+> pixelcoords loop. It consumes human-verified coordinates from a
+> pixelcoords session and acts on them — click, double-click, drag, type,
+> key chords, verify, wait_for, wait_gone — referencing regions by label,
+> never by raw coordinate. Every target is re-located against a fresh
+> capture before acting; a target that can't be found unambiguously is
+> refused before anything is injected; results distinguish "executed"
+> from "verified"; exit codes are the API (0 done, 1 failed, 2 malformed,
+> 3 refused). Three surfaces, one implementation: chained argv verbs,
+> TOML flow files, and a JSON line protocol over stdio so a program in
+> any language owns the loop. Status: early, and macOS only — Windows and
+> X11 are next; nothing is published yet.
+
+Install: `cargo install pixelactions`, or prebuilt binaries from
+https://github.com/nolindnaidoo/pixelactions/releases
+
+## Docs
+
+- [CLI reference](https://github.com/nolindnaidoo/pixelactions/blob/main/docs/CLI.md):
+  plan, run, serve, doctor; chained verbs; the kill switch; exit codes
+- [Flow files](https://github.com/nolindnaidoo/pixelactions/blob/main/docs/FLOW.md):
+  every step and setting
+- [Line protocol](https://github.com/nolindnaidoo/pixelactions/blob/main/docs/PROTOCOL.md):
+  one JSON per line, with a complete stdlib-Python client
+- [Output schema](https://github.com/nolindnaidoo/pixelactions/blob/main/docs/OUTPUT.md):
+  run, plan, and doctor reports
+
+## Pages
+
+- [Home](https://pixelactions.dev/): the flow file, the sixty-second tour, the loop
+- [vs PyAutoGUI](https://pixelactions.dev/vs/pyautogui)
+- [vs SikuliX](https://pixelactions.dev/vs/sikulix)
+- [vs AutoHotkey](https://pixelactions.dev/vs/autohotkey)
+- [How to automate desktop clicks](https://pixelactions.dev/how-to/automate-desktop-clicks):
+  built-in methods per OS, the pitfalls that break them, verified execution
+
+Non-goals (settled): an embedded interpreter, a scripting language, a
+network surface, a recorder, browser automation, cloud.
+Companion tool: pixelcoords (https://pixelcoords.dev) marks the regions
+this tool acts on. Source: https://github.com/nolindnaidoo/pixelactions ·
+crates.io: https://crates.io/crates/pixelactions · Author: nolindnaidoo
+(https://github.com/nolindnaidoo)

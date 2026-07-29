@@ -1,0 +1,4 @@
+[test]
+# Order matters: test-dom.ts registers happy-dom BEFORE test-setup.ts (and
+# any test file) evaluates testing-library imports. See test-dom.ts.
+preload = ["./test-dom.ts", "./test-setup.ts"]
