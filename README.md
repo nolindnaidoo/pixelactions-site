@@ -16,10 +16,11 @@ itself is still pre-publication — the site's own copy says so.)
 ## The family
 
 - **[pixelactions](https://github.com/nolindnaidoo/pixelactions)** — the
-  tool this site stages: the `pixelactions` binary plus
-  `pixelactions-core`, the platform-free core (flow schema, plan
-  resolution, coordinate conversion, run reports). Reads sessions
-  through `pixelcoords-core`.
+  tool this site stages: the
+  [`pixelactions`](https://crates.io/crates/pixelactions) binary plus
+  [`pixelactions-core`](https://crates.io/crates/pixelactions-core),
+  the platform-free core (flow schema, plan resolution, coordinate
+  conversion, run reports). Reads sessions through `pixelcoords-core`.
 - **[pixelcoords](https://github.com/nolindnaidoo/pixelcoords)** — the
   capture half of the loop, live at
   [pixelcoords.dev](https://pixelcoords.dev)

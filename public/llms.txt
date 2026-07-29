@@ -40,9 +40,10 @@ https://github.com/nolindnaidoo/pixelactions/releases
 Non-goals (settled): an embedded interpreter, a scripting language, a
 network surface, a recorder, browser automation, cloud.
 Companion tool: pixelcoords (https://pixelcoords.dev) marks the regions
-this tool acts on. Crates: pixelactions (the binary) +
-pixelactions-core (platform-free core: flow schema, plan resolution,
-coordinate conversion, run reports); sessions are read through
+this tool acts on. Crates: pixelactions (https://crates.io/crates/pixelactions, the
+binary) + pixelactions-core
+(https://crates.io/crates/pixelactions-core — platform-free core: flow
+schema, plan resolution, coordinate conversion, run reports); sessions are read through
 pixelcoords-core (https://crates.io/crates/pixelcoords-core).
 Source: https://github.com/nolindnaidoo/pixelactions ·
 crates.io: https://crates.io/crates/pixelactions · Author: nolindnaidoo

@@ -30,8 +30,7 @@ skipped local run is caught — it just costs a red badge instead of seconds.
 2. Sweep page copy against the tool's README/docs for claims the release
    changed — reproduce new hedges, retire resolved ones (e.g. the
    "Windows is next" notes when 0.2.0 lands, and the "no crate or
-   binaries" lines at first publication). First publication also flips
-   `CORE_URL` in `lib/site.ts` from the GitHub crate dir to crates.io.
+   binaries" lines at first publication).
 3. The pixelcoords *companion* is a claim too: the install section says
    to install both, and the loop copy assumes the pixelcoords binary —
    sweep those lines when pixelcoords releases move.
