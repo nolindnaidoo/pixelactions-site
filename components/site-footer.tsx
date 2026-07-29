@@ -1,5 +1,5 @@
 import { SITE_PAGES } from '@/lib/pages'
-import { CRATES_URL, DOCS_BASE_URL, GITHUB_URL } from '@/lib/site'
+import { COMPANION_URL, CRATES_URL, DOCS_BASE_URL, GITHUB_URL } from '@/lib/site'
 
 const SITE_LINKS = SITE_PAGES.filter(page => page.path !== '/')
 
@@ -27,6 +27,9 @@ export function SiteFooter() {
           </a>
           <a className="py-2 hover:text-foreground" href={CRATES_URL}>
             crates.io
+          </a>
+          <a className="py-2 hover:text-foreground" href={COMPANION_URL}>
+            pixelcoords.dev
           </a>
           {DOC_LINKS.map(link => (
             <a key={link.href} className="py-2 hover:text-foreground" href={link.href}>

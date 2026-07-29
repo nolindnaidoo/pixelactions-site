@@ -12,6 +12,21 @@ Static Next.js export. **Local-only today** — the tool is unpublished
 (no crates.io release, no GitHub repo yet); the site deploys to Vercel
 by push to `main` when the tool publishes.
 
+## The family
+
+- **[pixelactions](https://github.com/nolindnaidoo/pixelactions)** — the
+  tool this site stages: the `pixelactions` binary plus
+  `pixelactions-core`, the platform-free core (flow schema, plan
+  resolution, coordinate conversion, run reports). Reads sessions
+  through `pixelcoords-core`.
+- **[pixelcoords](https://github.com/nolindnaidoo/pixelcoords)** — the
+  capture half of the loop, live at
+  [pixelcoords.dev](https://pixelcoords.dev)
+  ([site repo](https://github.com/nolindnaidoo/pixelcoords-site)): the
+  `pixelcoords` binary plus
+  [`pixelcoords-core`](https://crates.io/crates/pixelcoords-core), both
+  on crates.io.
+
 ## The page set (capped at six)
 
 | Page | Job |

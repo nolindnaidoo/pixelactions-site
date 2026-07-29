@@ -1,6 +1,6 @@
 import { CodeBlock } from '@/components/code-block'
 import { SelectionFrame } from '@/components/selection-frame'
-import { GITHUB_URL, TAGLINE } from '@/lib/site'
+import { COMPANION_URL, GITHUB_URL, TAGLINE } from '@/lib/site'
 
 // The reviewable artifact is the demo: the flow file from the tool README.
 const FLOW_FILE = `session = "~/captures/checkout"
@@ -34,10 +34,16 @@ export function Hero() {
           vocabulary across three surfaces
         </p>
         <p className="max-w-2xl text-lg leading-8">
-          pixelcoords freezes your screen, lets you mark labeled regions, and writes pixel-exact
-          coordinates with crops. pixelactions reads that session and acts on it — referencing
-          regions <strong>by label, never by raw coordinate</strong>, so a run survives the UI
-          moving. The loop is <span className="font-mono text-base">find → act → assert</span>.
+          <a
+            className="underline decoration-border-token underline-offset-4 hover:decoration-foreground"
+            href={COMPANION_URL}
+          >
+            pixelcoords
+          </a>{' '}
+          freezes your screen, lets you mark labeled regions, and writes pixel-exact coordinates
+          with crops. pixelactions reads that session and acts on it — referencing regions{' '}
+          <strong>by label, never by raw coordinate</strong>, so a run survives the UI moving. The
+          loop is <span className="font-mono text-base">find → act → assert</span>.
         </p>
         <p className="max-w-2xl font-mono text-sm text-foreground/70 dark:text-foreground/55">
           Status: early, and macOS only. The loop works end to end; Windows and X11 are next.

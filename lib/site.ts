@@ -6,6 +6,8 @@ export const GITHUB_URL = 'https://github.com/nolindnaidoo/pixelactions'
 export const CRATES_URL = 'https://crates.io/crates/pixelactions'
 export const RELEASES_URL = 'https://github.com/nolindnaidoo/pixelactions/releases'
 export const DOCS_BASE_URL = 'https://github.com/nolindnaidoo/pixelactions/blob/main/docs'
+// The capture half of the loop — the companion tool's site.
+export const COMPANION_URL = 'https://pixelcoords.dev'
 
 export const TAGLINE =
   'Consume human-verified coordinates, perform the interaction, confirm it landed'
