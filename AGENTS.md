@@ -19,8 +19,7 @@ that document when a convention here is terse; the intent is identical.
 The promo + search site for the pixelactions tool (`~/dev/pixelactions`), at
 **https://pixelactions.dev**. A fully static poster: `output: "export"`, no
 API routes, no server actions, no backend seams, no fetches. Deploy is
-`git push` to `main` → Vercel (deferred: local-only, no remote, until the
-tool publishes). **Six-page cap** (home, three `/vs/`, one
+`git push` to `main` → Vercel. **Six-page cap** (home, three `/vs/`, one
 how-to, one earned spare) and the **claim quarantine** (version-specific
 competitor claims live only in `lib/competitors.ts`, rendered with a dated
 "verified against" stamp; prose argues philosophy) are product rules, not

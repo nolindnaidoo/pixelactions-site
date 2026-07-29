@@ -1,16 +1,17 @@
 # pixelactions-site
 
+[![CI](https://github.com/nolindnaidoo/pixelactions-site/actions/workflows/ci.yml/badge.svg)](https://github.com/nolindnaidoo/pixelactions-site/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![pixelactions.dev](https://img.shields.io/badge/web-pixelactions.dev-00A0FF.svg)](https://pixelactions.dev)
 
-The promo and search site for
+**Live at [pixelactions.dev](https://pixelactions.dev)** — the promo and
+search site for
 [pixelactions](https://github.com/nolindnaidoo/pixelactions), the
 executor half of the [pixelcoords](https://pixelcoords.dev) loop. Built
 by [nolindnaidoo](https://github.com/nolindnaidoo).
 
-Static Next.js export. **Local-only today** — the tool is unpublished
-(no crates.io release, no GitHub repo yet); the site deploys to Vercel
-by push to `main` when the tool publishes.
+Static Next.js export on Vercel. Deploys by push to `main`. (The tool
+itself is still pre-publication — the site's own copy says so.)
 
 ## The family
 

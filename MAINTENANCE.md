@@ -42,9 +42,7 @@ skipped local run is caught — it just costs a red badge instead of seconds.
 2. `bun run snapshots` → regenerates the macOS baselines locally.
 3. Push, then run the **"Update visual snapshots (Linux)"** workflow from
    the Actions tab — it regenerates the Linux baselines on the CI runner
-   and commits them back. (Deferred while the repo has no remote — the
-   site is local-only until the tool publishes; only darwin baselines
-   exist today.)
+   and commits them back.
 4. The bot's commit cannot trigger CI itself (GITHUB_TOKEN recursion
    guard), so the badge stays on the pre-baseline failure until the next
    push — or run the CI workflow manually from the Actions tab to clear
