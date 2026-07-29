@@ -8,6 +8,11 @@ export const RELEASES_URL = 'https://github.com/nolindnaidoo/pixelactions/releas
 export const DOCS_BASE_URL = 'https://github.com/nolindnaidoo/pixelactions/blob/main/docs'
 // The capture half of the loop — the companion tool's site.
 export const COMPANION_URL = 'https://pixelcoords.dev'
+// The platform-free cores. Ours links the GitHub crate dir until the crate
+// publishes — flip to crates.io then (MAINTENANCE.md release sweep).
+export const CORE_URL =
+  'https://github.com/nolindnaidoo/pixelactions/tree/main/crates/pixelactions-core'
+export const COMPANION_CORE_URL = 'https://crates.io/crates/pixelcoords-core'
 
 export const TAGLINE =
   'Consume human-verified coordinates, perform the interaction, confirm it landed'

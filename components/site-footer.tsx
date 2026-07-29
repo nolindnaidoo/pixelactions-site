@@ -1,5 +1,12 @@
 import { SITE_PAGES } from '@/lib/pages'
-import { COMPANION_URL, CRATES_URL, DOCS_BASE_URL, GITHUB_URL } from '@/lib/site'
+import {
+  COMPANION_CORE_URL,
+  COMPANION_URL,
+  CORE_URL,
+  CRATES_URL,
+  DOCS_BASE_URL,
+  GITHUB_URL,
+} from '@/lib/site'
 
 const SITE_LINKS = SITE_PAGES.filter(page => page.path !== '/')
 
@@ -8,6 +15,14 @@ const DOC_LINKS = [
   { label: 'Flow files', href: `${DOCS_BASE_URL}/FLOW.md` },
   { label: 'Line protocol', href: `${DOCS_BASE_URL}/PROTOCOL.md` },
   { label: 'Output schema', href: `${DOCS_BASE_URL}/OUTPUT.md` },
+] as const
+
+// The whole family, findable from every page: the companion tool's site
+// and both platform-free cores.
+const FAMILY_LINKS = [
+  { label: 'pixelcoords.dev', href: COMPANION_URL },
+  { label: 'pixelactions-core', href: CORE_URL },
+  { label: 'pixelcoords-core', href: COMPANION_CORE_URL },
 ] as const
 
 export function SiteFooter() {
@@ -28,10 +43,14 @@ export function SiteFooter() {
           <a className="py-2 hover:text-foreground" href={CRATES_URL}>
             crates.io
           </a>
-          <a className="py-2 hover:text-foreground" href={COMPANION_URL}>
-            pixelcoords.dev
-          </a>
           {DOC_LINKS.map(link => (
+            <a key={link.href} className="py-2 hover:text-foreground" href={link.href}>
+              {link.label}
+            </a>
+          ))}
+        </nav>
+        <nav aria-label="The loop" className="flex flex-wrap gap-x-5 gap-y-2 font-mono text-xs">
+          {FAMILY_LINKS.map(link => (
             <a key={link.href} className="py-2 hover:text-foreground" href={link.href}>
               {link.label}
             </a>
