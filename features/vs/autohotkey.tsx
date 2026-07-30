@@ -12,13 +12,13 @@ export function AutohotkeyPage() {
         <p>
           AutoHotkey is the deepest desktop automation tool on Windows — hotkeys, window management,
           GUIs, COM, a full language, actively maintained for two decades. On Windows, nothing else
-          comes close, and pixelactions is not there yet: today it runs on macOS, with Windows next.
-          The difference is one of kind, not depth. AutoHotkey is a language you write; pixelactions
-          is deliberately not a language — a list of steps over regions a human marked in
-          pixelcoords, re-located against a fresh capture and verified at run time, with loops and
-          branching left to whatever language you already write, over the line protocol. If your
-          automation is a program, AutoHotkey gives you its language; pixelactions gives your
-          language an executor.
+          comes close, and pixelactions is not there yet: today it runs on macOS and on Linux under
+          Wayland (GNOME and KDE), with Windows next. The difference is one of kind, not depth.
+          AutoHotkey is a language you write; pixelactions is deliberately not a language — a list
+          of steps over regions a human marked in pixelcoords, re-located against a fresh capture
+          and verified at run time, with loops and branching left to whatever language you already
+          write, over the line protocol. If your automation is a program, AutoHotkey gives you its
+          language; pixelactions gives your language an executor.
         </p>
       }
       whenThem={[

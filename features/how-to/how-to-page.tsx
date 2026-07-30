@@ -116,7 +116,12 @@ ydotool click 0xC0                  # Wayland: needs the ydotoold daemon + /dev/
           <code className="font-mono text-sm">/dev/uinput</code>.
         </p>
         <p className="text-sm text-foreground/70 dark:text-foreground/55">
-          Honesty note: pixelactions targets X11 next, alongside Windows; Wayland comes after.
+          Honesty note: pixelactions runs on Wayland today, through the sanctioned path (portal
+          RemoteDesktop + EIS on GNOME and KDE). X11 is next — it&apos;s currently refused rather
+          than half-served, because injecting through XWayland reaches only X clients and would
+          silently miss every native window. One caveat on Wayland: there is no way to read the
+          pointer position, so the corner kill switch does not apply and a flow must opt out of it
+          deliberately with <code className="font-mono text-sm">failsafe = false</code>.
         </p>
       </OsSection>
 

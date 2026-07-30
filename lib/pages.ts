@@ -26,12 +26,12 @@ export const SITE_PAGES: readonly SitePage[] = [
     path: '/',
     title: 'pixelactions — Execute desktop flows from reviewable files: find, act, assert',
     description:
-      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, three surfaces: chained commands, TOML flow files, a JSON line protocol for any language. Free, MIT. macOS today; Windows and X11 next.',
+      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, three surfaces: chained commands, TOML flow files, a JSON line protocol for any language. Free, MIT. macOS and Linux/Wayland today; X11 and Windows next.',
     headline: 'Consume human-verified coordinates',
     navLabel: 'Home',
     ogKicker: 'pixelactions',
     ogTitle: 'Consume human-verified coordinates, perform the interaction, confirm it landed',
-    lastModified: '2026-07-29',
+    lastModified: '2026-07-30',
     sitemapPriority: 1,
   },
   {
@@ -62,12 +62,12 @@ export const SITE_PAGES: readonly SitePage[] = [
     path: '/vs/autohotkey',
     title: 'pixelactions vs AutoHotkey',
     description:
-      'AutoHotkey is the Windows automation institution — a full scripting language. pixelactions is deliberately not a language: a list of steps over human-marked regions, re-located and verified at run time. macOS today, Windows next — an honest comparison.',
+      'AutoHotkey is the Windows automation institution — a full scripting language. pixelactions is deliberately not a language: a list of steps over human-marked regions, re-located and verified at run time. macOS and Linux/Wayland today, Windows next — an honest comparison.',
     headline: 'pixelactions vs AutoHotkey',
     navLabel: 'vs AutoHotkey',
     ogKicker: 'comparison',
     ogTitle: 'pixelactions vs AutoHotkey',
-    lastModified: '2026-07-29',
+    lastModified: '2026-07-30',
     sitemapPriority: 0.8,
   },
   {
