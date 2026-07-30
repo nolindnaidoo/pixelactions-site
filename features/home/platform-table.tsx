@@ -8,11 +8,15 @@ const PLATFORMS = [
     state: 'Supported — the loop works end to end; primary development platform',
   },
   {
+    name: 'Linux (X11)',
+    state:
+      'Supported — XTEST in root-window pixels. No caveat: X11 reports the pointer position, so the kill switch is armed',
+  },
+  {
     name: 'Linux (Wayland)',
     state:
       'Supported on GNOME and KDE, via the portal + EIS path. One caveat: no kill switch — a Wayland flow must set failsafe = false deliberately',
   },
-  { name: 'Linux (X11)', state: 'Next — refused rather than half-served today' },
   { name: 'Windows', state: 'Next — the goal is the same flow file running unmodified' },
 ] as const
 
@@ -48,8 +52,8 @@ export function PlatformTable() {
         </table>
       </div>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        macOS and Linux binaries are published; X11 and Windows are the next milestones. This table
-        is kept honest — claims match runs.
+        macOS and Linux binaries are published; Windows is the next milestone. This table is kept
+        honest — claims match runs.
       </p>
     </section>
   )

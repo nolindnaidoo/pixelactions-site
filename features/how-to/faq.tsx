@@ -28,7 +28,7 @@ export const FAQ = [
   {
     question: 'Is there a maintained alternative to PyAutoGUI?',
     answer:
-      'Depends on the job. As of mid-2026, PyAutoGUI has not shipped a release since May 2023. The browser belongs to Playwright and Selenium; where an accessibility tree exists, a11y-first tools are more robust. For coordinate execution against human-marked regions — canvas apps, legacy software, streamed desktops — pixelactions is built for exactly that, on macOS and on Linux under Wayland today; X11 and Windows are next.',
+      'Depends on the job. As of mid-2026, PyAutoGUI has not shipped a release since May 2023. The browser belongs to Playwright and Selenium; where an accessibility tree exists, a11y-first tools are more robust. For coordinate execution against human-marked regions — canvas apps, legacy software, streamed desktops — pixelactions is built for exactly that, on macOS and on Linux — both X11 and Wayland — today; Windows is next.',
   },
 ] as const
 
