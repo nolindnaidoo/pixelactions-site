@@ -6,6 +6,7 @@ import {
   CRATES_URL,
   DOCS_BASE_URL,
   GITHUB_URL,
+  LETOOLS_URL,
 } from '@/lib/site'
 
 const SITE_LINKS = SITE_PAGES.filter(page => page.path !== '/')
@@ -23,6 +24,7 @@ const FAMILY_LINKS = [
   { label: 'pixelcoords.dev', href: COMPANION_URL },
   { label: 'pixelactions-core', href: CORE_URL },
   { label: 'pixelcoords-core', href: COMPANION_CORE_URL },
+  { label: 'letools.dev', href: LETOOLS_URL },
 ] as const
 
 export function SiteFooter() {

@@ -11,6 +11,8 @@ export const COMPANION_URL = 'https://pixelcoords.dev'
 // The platform-free cores.
 export const CORE_URL = 'https://crates.io/crates/pixelactions-core'
 export const COMPANION_CORE_URL = 'https://crates.io/crates/pixelcoords-core'
+// The maker's VS Code extension family hub (letools.dev) — reciprocal link.
+export const LETOOLS_URL = 'https://letools.dev'
 
 export const TAGLINE =
   'Consume human-verified coordinates, perform the interaction, confirm it landed'
