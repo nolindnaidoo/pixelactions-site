@@ -26,11 +26,13 @@ skipped local run is caught — it just costs a red badge instead of seconds.
 
 ## Each pixelactions release
 
-1. `TOOL_VERSION` in `lib/site.ts`.
+1. `TOOL_VERSION` in `lib/site.ts` **and** `version` in `package.json` —
+   they should track together.
 2. Sweep page copy against the tool's README/docs for claims the release
-   changed — reproduce new hedges, retire resolved ones (e.g. the
-   "Windows is next" notes when 0.2.0 lands, and the "no crate or
-   binaries" lines at first publication).
+   changed — reproduce new hedges, retire resolved ones (e.g. flip the
+   "Windows is next" line when Windows lands; the Wayland row on the
+   platform table moved from "later" to "supported with one caveat" in
+   0.2.0; retire the "no crate or binaries" lines at first publication).
 3. The pixelcoords *companion* is a claim too: the install section says
    to install both, and the loop copy assumes the pixelcoords binary —
    sweep those lines when pixelcoords releases move.

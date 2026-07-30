@@ -13,7 +13,7 @@ export const FAQ = [
   {
     question: 'How do I automate mouse clicks on Wayland?',
     answer:
-      'With difficulty, by design: Wayland keeps applications from injecting input into each other. xdotool only reaches XWayland windows, and ydotool works by becoming a virtual input device — which needs its daemon running and permission on /dev/uinput. pixelactions targets X11 next, alongside Windows; Wayland comes after.',
+      'Through the sanctioned path: xdg-desktop-portal RemoteDesktop linked to a ScreenCast session, acting over EIS. You consent once (a screen-share dialog) and the grant is remembered, so later runs do not prompt. pixelactions ships this out of the box on GNOME and KDE — no ydotool daemon, no /dev/uinput permission, no XWayland limitations. One caveat: Wayland exposes no way to ask where the pointer is, so the corner kill switch does not apply and a flow must opt out of it deliberately (failsafe = false).',
   },
   {
     question: 'How can a script tell whether a click actually worked?',
@@ -28,7 +28,7 @@ export const FAQ = [
   {
     question: 'Is there a maintained alternative to PyAutoGUI?',
     answer:
-      'Depends on the job. As of mid-2026, PyAutoGUI has not shipped a release since May 2023. The browser belongs to Playwright and Selenium; where an accessibility tree exists, a11y-first tools are more robust. For coordinate execution against human-marked regions — canvas apps, legacy software, streamed desktops — pixelactions is built for exactly that, early and macOS-only today.',
+      'Depends on the job. As of mid-2026, PyAutoGUI has not shipped a release since May 2023. The browser belongs to Playwright and Selenium; where an accessibility tree exists, a11y-first tools are more robust. For coordinate execution against human-marked regions — canvas apps, legacy software, streamed desktops — pixelactions is built for exactly that, on macOS and on Linux under Wayland today; X11 and Windows are next.',
   },
 ] as const
 

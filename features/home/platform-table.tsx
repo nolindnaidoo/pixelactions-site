@@ -7,9 +7,13 @@ const PLATFORMS = [
     name: 'macOS',
     state: 'Supported — the loop works end to end; primary development platform',
   },
+  {
+    name: 'Linux (Wayland)',
+    state:
+      'Supported on GNOME and KDE, via the portal + EIS path. One caveat: no kill switch — a Wayland flow must set failsafe = false deliberately',
+  },
+  { name: 'Linux (X11)', state: 'Next — refused rather than half-served today' },
   { name: 'Windows', state: 'Next — the goal is the same flow file running unmodified' },
-  { name: 'Linux (X11)', state: 'Next — alongside Windows' },
-  { name: 'Linux (Wayland)', state: 'Later — after Windows and X11' },
 ] as const
 
 export function PlatformTable() {
@@ -44,8 +48,8 @@ export function PlatformTable() {
         </table>
       </div>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        The macOS binary is published; Windows and X11 are the next milestone. This table is kept
-        honest — claims match runs.
+        macOS and Linux binaries are published; X11 and Windows are the next milestones. This table
+        is kept honest — claims match runs.
       </p>
     </section>
   )
