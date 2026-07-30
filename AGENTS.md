@@ -11,7 +11,7 @@ this file in the same change. `CLAUDE.md` carries the repo-specific honesty
 rules; `README.md` carries the page map; **`MAINTENANCE.md` is the runbook —
 every recurring ritual (stamp walk, releases, snapshots, deps, fonts) with
 exact commands.** This file
-adapts the house standards from `~/dev/offensiveedge-web/AGENTS.md` — read
+adapts the house standards from `~/dev/edgeseeker/offensiveedge-web/AGENTS.md` — read
 that document when a convention here is terse; the intent is identical.
 
 ## What this repo is
