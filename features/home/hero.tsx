@@ -1,6 +1,6 @@
 import { CodeBlock } from '@/components/code-block'
 import { SelectionFrame } from '@/components/selection-frame'
-import { COMPANION_URL, GITHUB_URL, TAGLINE } from '@/lib/site'
+import { COMPANION_URL, GITHUB_URL, TAGLINE, TOOL_VERSION } from '@/lib/site'
 
 // The reviewable artifact is the demo: the flow file from the tool README.
 const FLOW_FILE = `session = "~/captures/checkout"
@@ -46,8 +46,8 @@ export function Hero() {
           loop is <span className="font-mono text-base">find → act → assert</span>.
         </p>
         <p className="max-w-2xl font-mono text-sm text-foreground/70 dark:text-foreground/55">
-          Status: early. The loop works end to end on macOS and on Linux under Wayland (GNOME and
-          KDE); X11 and Windows are next. Published as v0.2.0 on crates.io.
+          Status: early. The loop works end to end on macOS and on Linux — both X11 and Wayland
+          (GNOME and KDE); Windows is next. Published as v{TOOL_VERSION} on crates.io.
         </p>
         <div className="flex flex-wrap gap-4 font-mono text-sm">
           <a

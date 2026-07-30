@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s — pixelactions',
   },
   description:
-    'Execute desktop interactions from a pixelcoords session: click, type, and drag by label — re-located before acting, verified after, refused rather than guessed. Free, MIT. macOS today.',
+    'Execute desktop interactions from a pixelcoords session: click, type, and drag by label — re-located before acting, verified after, refused rather than guessed. Free, MIT. macOS and Linux today.',
 }
 
 export const viewport: Viewport = {

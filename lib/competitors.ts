@@ -49,8 +49,8 @@ export type Competitor = {
 export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
   price: { value: 'Free', wins: true },
   platforms: {
-    value: 'macOS · Linux (Wayland) today; X11 and Windows next',
-    note: 'GNOME/KDE Wayland via the sanctioned portal + EIS path — the incumbent everyone runs (PyAutoGUI) has no answer for it',
+    value: 'macOS · Linux (X11 + Wayland) today; Windows next',
+    note: 'X11 via XTEST, and GNOME/KDE Wayland via the sanctioned portal + EIS path — the incumbent everyone runs (PyAutoGUI) has no answer for Wayland at all',
   },
   declarative: {
     value: 'TOML flows + chained argv',
