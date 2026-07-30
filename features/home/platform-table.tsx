@@ -8,6 +8,11 @@ const PLATFORMS = [
     state: 'Supported — the loop works end to end; primary development platform',
   },
   {
+    name: 'Windows',
+    state:
+      'Supported — SendInput across the whole virtual desktop, kill switch included. One limit: UIPI, which no permission lifts — a process at medium integrity cannot drive an elevated window, the UAC dialog, or the login screen',
+  },
+  {
     name: 'Linux (X11)',
     state:
       'Supported — XTEST in root-window pixels. No caveat: X11 reports the pointer position, so the kill switch is armed',
@@ -17,7 +22,6 @@ const PLATFORMS = [
     state:
       'Supported on GNOME and KDE, via the portal + EIS path. One caveat: no kill switch — a Wayland flow must set failsafe = false deliberately',
   },
-  { name: 'Windows', state: 'Next — the goal is the same flow file running unmodified' },
 ] as const
 
 export function PlatformTable() {
@@ -52,8 +56,10 @@ export function PlatformTable() {
         </table>
       </div>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        macOS and Linux binaries are published; Windows is the next milestone. This table is kept
-        honest — claims match runs.
+        Binaries ship for every platform above — shipping one that refuses to inject would imply
+        support a build does not have. Windows placement is measured rather than assumed, but on a
+        single-display machine: multi-monitor and mixed-DPI layouts are unit-tested and have not
+        been run on real hardware yet. This table is kept honest — claims match runs.
       </p>
     </section>
   )

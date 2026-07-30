@@ -46,8 +46,9 @@ export function Hero() {
           loop is <span className="font-mono text-base">find → act → assert</span>.
         </p>
         <p className="max-w-2xl font-mono text-sm text-foreground/70 dark:text-foreground/55">
-          Status: early. The loop works end to end on macOS and on Linux — both X11 and Wayland
-          (GNOME and KDE); Windows is next. Published as v{TOOL_VERSION} on crates.io.
+          Status: early. The loop works end to end on macOS, Windows, and Linux — both X11 and
+          Wayland (GNOME and KDE). That is every platform this tool set out to cover. Published as v
+          {TOOL_VERSION} on crates.io.
         </p>
         <div className="flex flex-wrap gap-4 font-mono text-sm">
           <a

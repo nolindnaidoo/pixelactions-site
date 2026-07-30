@@ -40,6 +40,17 @@ export function InstallBlock({ variant }: { readonly variant: 'full' | 'compact'
             that launches pixelactions, not the binary — <code>doctor --probe</code> proves the
             grant instead of assuming it.
           </p>
+          <p>
+            Windows asks for nothing, and has nothing to install. What it has instead is a limit no
+            permission lifts: a process at medium integrity cannot send input to an elevated window,
+            the UAC dialog, or the login screen. <code>doctor</code> reports which of the two you
+            are.
+          </p>
+          <p>
+            Linux/Wayland asks you to share a screen once, and remembers it; Linux/X11 asks nothing,
+            because X11 has nothing to ask. Building on Linux needs the xkbcommon headers —{' '}
+            <code>libxkbcommon-dev</code> and <code>pkg-config</code>.
+          </p>
         </div>
       )}
     </section>

@@ -8,11 +8,16 @@ coding standards; README.md owns the page map; this file owns *time*.
 
 ```bash
 bun run verify        # lint + typecheck + unit tests + build
-bun run e2e           # the full Playwright suite against the export
+bun run e2e           # axe, keyboard, reflow, SEO — visual specs skip here
+bun run e2e:visual    # visual regression, in Docker (see below)
 ```
 
 CI repeats exactly this on every push (plus budget + Lighthouse), so a
 skipped local run is caught — it just costs a red badge instead of seconds.
+
+`e2e:visual` needs Docker Desktop running; the other two never do. Skipping
+it locally is fine — the `visual` CI job renders with the identical image, so
+the verdict is the same, just later.
 
 ## Twice a year (calendared): the stamp walk
 
@@ -29,10 +34,19 @@ skipped local run is caught — it just costs a red badge instead of seconds.
 1. `TOOL_VERSION` in `lib/site.ts` **and** `version` in `package.json` —
    they should track together.
 2. Sweep page copy against the tool's README/docs for claims the release
-   changed — reproduce new hedges, retire resolved ones (e.g. flip the
-   "Windows is next" line when Windows lands; the Wayland row on the
-   platform table moved from "later" to "supported with one caveat" in
-   0.2.0; retire the "no crate or binaries" lines at first publication).
+   changed — reproduce new hedges, retire resolved ones. Past shape: the
+   Wayland row moved from "later" to "supported with one caveat" in 0.2.0;
+   the "no crate or binaries" lines were retired at first publication;
+   0.4.0 flipped every "Windows is next" line and replaced it with the two
+   hedges Windows actually ships with (UIPI, and multi-monitor unverified
+   on hardware). A win and a hedge usually land in the same release —
+   a sweep that only removes the "next" line is half-done.
+   The claim surfaces are: `features/home/platform-table.tsx`,
+   `features/home/hero.tsx`, `components/install-block.tsx`,
+   `features/how-to/*`, `features/vs/*`, `lib/competitors.ts`
+   (`PIXELACTIONS_CELLS`), `lib/pages.ts` descriptions, the
+   `SOFTWARE_JSON_LD` `operatingSystem` in `features/home/home-page.tsx`,
+   and the default description in `app/layout.tsx`.
 3. The pixelcoords *companion* is a claim too: the install section says
    to install both, and the loop copy assumes the pixelcoords binary —
    sweep those lines when pixelcoords releases move.
@@ -40,15 +54,21 @@ skipped local run is caught — it just costs a red badge instead of seconds.
 
 ## Intentional visual change
 
-1. Make the change; `bun run e2e` fails on visual specs — expected.
-2. `bun run snapshots` → regenerates the macOS baselines locally.
-3. Push, then run the **"Update visual snapshots (Linux)"** workflow from
-   the Actions tab — it regenerates the Linux baselines on the CI runner
-   and commits them back.
-4. The bot's commit cannot trigger CI itself (GITHUB_TOKEN recursion
-   guard), so the badge stays on the pre-baseline failure until the next
-   push — or run the CI workflow manually from the Actions tab to clear
-   it immediately.
+1. Make the change; `bun run e2e:visual` fails — expected.
+2. `bun run snapshots` → regenerates every baseline. Commit and push. Done.
+
+There is one baseline set and one thing that renders it: the container in
+`.playwright-image`. `scripts/visual.ts` runs it locally and the `visual` CI
+job runs the same image, so a baseline made on any machine is the one CI
+judges against. This replaced a two-set arrangement — macOS baselines made
+locally, Linux ones made by a workflow — where changing machines re-authored
+one half and left the other stale.
+
+**Bumping Playwright is therefore a two-file change.** Dependabot moves
+`@playwright/test` in `package.json`; `.playwright-image` must move with it,
+and the baselines get regenerated in the same PR because a new image renders
+differently. `scripts/visual.ts` refuses to run on a mismatch rather than
+producing baselines nothing else can reproduce.
 
 ## Adding the sixth page (the last slot under the cap)
 

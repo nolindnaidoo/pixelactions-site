@@ -8,6 +8,11 @@ import { defineConfig, devices } from '@playwright/test'
 const PORT = 3000
 const baseURL = `http://localhost:${PORT}`
 
+// Inside the visual container (scripts/visual.ts) there is no bun and no
+// need to build — `out/` is built on the host first and mounted in, so the
+// server only has to serve it.
+const inContainer = process.env.PW_IN_CONTAINER !== undefined
+
 export default defineConfig({
   testDir: './e2e',
   testMatch: '**/*.e2e.ts',
@@ -24,7 +29,7 @@ export default defineConfig({
     { name: 'desktop', use: { ...devices['Desktop Chrome'] } },
   ],
   webServer: {
-    command: 'bun run build && bun run start',
+    command: inContainer ? 'npx --yes serve out -l 3000' : 'bun run build && bun run start',
     url: baseURL,
     timeout: 180_000,
     reuseExistingServer: !process.env.CI,

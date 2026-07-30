@@ -151,9 +151,8 @@ e2e/            Playwright specs (*.e2e.ts) + page a11y — loops read lib/pages
 CI (`.github/workflows/ci.yml`) enforces the full chain on every push and
 PR: lint, typecheck, unit/component tests, static build, the client-JS
 budget (`scripts/check-bundle-budget.ts` — raising it needs a written
-reason), the Playwright e2e/a11y suite including visual-regression
-snapshots (platform-suffixed baselines: macOS generated locally, Linux
-generated on the CI runner; the video is masked), and warn-level
+reason), the Playwright e2e/a11y suite, visual-regression snapshots in a
+separate `visual` job (the video is masked), and warn-level
 Lighthouse budgets (`lighthouserc.json`). The mono font ships as a
 latin-subset woff2 (`app/fonts.ts`); the full TTF stays only for OG
 cards.
@@ -163,8 +162,16 @@ plus the header set covers the static-site risk surface). Run locally:
 
 ```bash
 bun run typecheck && bun run lint && bun test && bun run build
-bun run e2e        # serves out/ and runs mobile-first + axe, both schemes
+bun run e2e          # serves out/ and runs mobile-first + axe, both schemes
+bun run e2e:visual   # visual regression in the pinned container (needs Docker)
 ```
+
+**Visual baselines have exactly one renderer** — the container pinned in
+`.playwright-image`, driven by `scripts/visual.ts` locally and by the
+`visual` CI job remotely. The specs skip unless `PW_VISUAL` is set, so they
+never run natively and never write a second, machine-specific baseline set.
+Bumping `@playwright/test` means bumping `.playwright-image` and
+regenerating in the same change; the script refuses on a mismatch.
 
 After `build`, `out/` must contain the page HTML, `robots.txt`,
 `sitemap.xml`, and the emitted icon/OG PNGs. A change is done when it is

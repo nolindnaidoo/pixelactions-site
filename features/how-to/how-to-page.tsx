@@ -95,8 +95,15 @@ pixelactions run --session <dir> click:submit verify:done --yes`}
           window is blocked unless the sender is elevated too.
         </p>
         <p className="text-sm text-foreground/70 dark:text-foreground/55">
-          Honesty note: pixelactions does not run on Windows yet — it&apos;s next, and the goal is
-          the same flow file running unmodified.
+          Honesty note: pixelactions runs on Windows today, through{' '}
+          <code className="font-mono text-sm">SendInput</code> across the whole virtual desktop
+          rather than the primary monitor, with per-monitor DPI awareness declared at startup so a
+          session&apos;s pixels and this process&apos;s pixels are the same quantity. A point off
+          the desktop is refused by name rather than clamped to the nearest edge. The
+          elevated-window limit above is Windows&apos; own — UIPI, which no permission lifts;{' '}
+          <code className="font-mono text-sm">doctor</code> reports whether this process is
+          elevated, so the answer is a fact about your machine. Multi-monitor and mixed-DPI layouts
+          are unit-tested but have not been run on real hardware yet.
         </p>
       </OsSection>
 

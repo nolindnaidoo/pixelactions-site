@@ -26,7 +26,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     path: '/',
     title: 'pixelactions — Execute desktop flows from reviewable files: find, act, assert',
     description:
-      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, three surfaces: chained commands, TOML flow files, a JSON line protocol for any language. Free, MIT. macOS and Linux (X11 and Wayland) today; Windows next.',
+      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, three surfaces: chained commands, TOML flow files, a JSON line protocol for any language. Free, MIT. macOS, Windows, and Linux (X11 and Wayland).',
     headline: 'Consume human-verified coordinates',
     navLabel: 'Home',
     ogKicker: 'pixelactions',
@@ -43,7 +43,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     navLabel: 'vs PyAutoGUI',
     ogKicker: 'comparison',
     ogTitle: 'pixelactions vs PyAutoGUI',
-    lastModified: '2026-07-29',
+    lastModified: '2026-07-30',
     sitemapPriority: 0.8,
   },
   {
@@ -55,14 +55,14 @@ export const SITE_PAGES: readonly SitePage[] = [
     navLabel: 'vs SikuliX',
     ogKicker: 'comparison',
     ogTitle: 'pixelactions vs SikuliX',
-    lastModified: '2026-07-29',
+    lastModified: '2026-07-30',
     sitemapPriority: 0.8,
   },
   {
     path: '/vs/autohotkey',
     title: 'pixelactions vs AutoHotkey',
     description:
-      'AutoHotkey is the Windows automation institution — a full scripting language. pixelactions is deliberately not a language: a list of steps over human-marked regions, re-located and verified at run time. macOS and Linux (X11 and Wayland) today, Windows next — an honest comparison.',
+      'AutoHotkey is the Windows automation institution — a full scripting language. pixelactions is deliberately not a language: a list of steps over human-marked regions, re-located and verified at run time. Both run on Windows; the difference is one of kind — an honest comparison.',
     headline: 'pixelactions vs AutoHotkey',
     navLabel: 'vs AutoHotkey',
     ogKicker: 'comparison',

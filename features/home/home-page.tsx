@@ -40,7 +40,7 @@ const SOFTWARE_JSON_LD = {
   '@type': 'SoftwareApplication',
   name: 'pixelactions',
   applicationCategory: 'DeveloperApplication',
-  operatingSystem: 'macOS',
+  operatingSystem: 'macOS, Windows, Linux',
   softwareVersion: TOOL_VERSION,
   description: TAGLINE,
   license: 'https://opensource.org/license/mit/',

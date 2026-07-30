@@ -6,6 +6,8 @@
 // they moved, restamp. Concessions are stated plainly and generously —
 // competitor wins render with the same positive treatment as ours.
 
+import { TOOL_VERSION } from './site'
+
 export const ROW_KEYS = [
   'price',
   'platforms',
@@ -49,8 +51,9 @@ export type Competitor = {
 export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
   price: { value: 'Free', wins: true },
   platforms: {
-    value: 'macOS · Linux (X11 + Wayland) today; Windows next',
-    note: 'X11 via XTEST, and GNOME/KDE Wayland via the sanctioned portal + EIS path — the incumbent everyone runs (PyAutoGUI) has no answer for Wayland at all',
+    value: 'macOS · Windows · Linux (X11 + Wayland)',
+    wins: true,
+    note: 'X11 via XTEST, GNOME/KDE Wayland via the sanctioned portal + EIS path, Windows across the whole virtual desktop rather than the primary monitor — the incumbent everyone runs (PyAutoGUI) has no answer for Wayland at all. Windows multi-monitor is unit-tested but not yet run on real hardware',
   },
   declarative: {
     value: 'TOML flows + chained argv',
@@ -71,7 +74,7 @@ export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
     value: 'Distinguishes executed from verified; exit codes 0/1/2/3',
     wins: true,
   },
-  maintenance: { value: 'In active development — v0.2.0 on crates.io' },
+  maintenance: { value: `In active development — v${TOOL_VERSION} on crates.io` },
   license: { value: 'MIT, open source', wins: true },
 }
 

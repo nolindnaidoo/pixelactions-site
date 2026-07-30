@@ -4,8 +4,6 @@ on:
   push:
     branches: [main]
   pull_request:
-  # The update-snapshots workflow commits with GITHUB_TOKEN, which GitHub
-  # never triggers CI from (recursion guard) — dispatch covers that gap.
   workflow_dispatch:
 
 permissions:
@@ -40,6 +38,9 @@ jobs:
           key: playwright-${{ runner.os }}-${{ hashFiles('bun.lock') }}
       - name: Install Playwright browser
         run: bunx playwright install --with-deps chromium
+      # Visual specs are excluded here by design — they skip unless PW_VISUAL
+      # is set, and only the `visual` job below renders them, in the pinned
+      # container. This runner's fonts are not the baselines' fonts.
       - name: E2E + a11y (mobile first, both schemes)
         run: bun run e2e
       # A red e2e uploads its evidence — traces, the HTML report, and the
@@ -58,3 +59,46 @@ jobs:
       # across a few releases. Chrome ships on the runner.
       - name: Lighthouse budgets
         run: bunx lhci autorun
+
+  # The image tag lives in .playwright-image so the local runner
+  # (scripts/visual.ts) and this job can never drift apart. `container.image`
+  # takes an expression but not a file, hence reading it into an output.
+  image:
+    runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.read.outputs.ref }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - id: read
+        run: echo "ref=$(cat .playwright-image)" >> "$GITHUB_OUTPUT"
+
+  # Visual regression, rendered by the SAME container that generates the
+  # baselines locally — not by the bare runner, whose fonts rasterize
+  # differently. One environment renders them, so one set of baselines exists
+  # and a change of machine changes nothing. See MAINTENANCE.md.
+  visual:
+    needs: image
+    runs-on: ubuntu-latest
+    container:
+      image: ${{ needs.image.outputs.ref }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: .bun-version
+      - run: bun install --frozen-lockfile
+      - run: bun run build
+      - name: Visual regression
+        run: bunx playwright test e2e/visual.e2e.ts
+        env:
+          PW_VISUAL: '1'
+          PW_IN_CONTAINER: '1'
+      - name: Upload visual evidence
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: visual-evidence
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7

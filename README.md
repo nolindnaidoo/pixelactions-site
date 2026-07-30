@@ -10,8 +10,8 @@ search site for
 executor half of the [pixelcoords](https://pixelcoords.dev) loop. Built
 by [nolindnaidoo](https://github.com/nolindnaidoo).
 
-Static Next.js export on Vercel. Deploys by push to `main`. (The tool
-itself is still pre-publication — the site's own copy says so.)
+Static Next.js export on Vercel. Deploys by push to `main`. The tool
+version the copy is written against is `TOOL_VERSION` in `lib/site.ts`.
 
 ## The family
 
