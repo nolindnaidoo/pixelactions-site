@@ -61,6 +61,20 @@ export function PlatformTable() {
         single-display machine: multi-monitor and mixed-DPI layouts are unit-tested and have not
         been run on real hardware yet. This table is kept honest — claims match runs.
       </p>
+      <p className="text-sm text-foreground/70 dark:text-foreground/55">
+        Those runs were 0.2.0 through 0.4.0. Five releases have shipped since — the pixelcoords
+        seam, <code>changed</code>, the audit log, the MCP surface, and a round of bug fixes — and
+        on Windows, X11 and Wayland none of them has been driven by hand. macOS has. They pass CI on
+        all four platforms and have headless tests, which is not the same thing, and this page will
+        say so until someone sits at each machine.
+      </p>
+      <p className="text-sm text-foreground/70 dark:text-foreground/55">
+        One slice of that is automatic now: a scenario script runs in CI against a live X server and
+        checks that a marked region is located, that a click lands where the plan said, that a
+        cursor in a screen corner refuses the step, and that the audit log records a refused run. A
+        real X server and a real synthetic event — on a bare 1280×1024 virtual display with no
+        window manager, which is not a desktop.
+      </p>
     </section>
   )
 }

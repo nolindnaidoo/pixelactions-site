@@ -31,7 +31,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     navLabel: 'Home',
     ogKicker: 'pixelactions',
     ogTitle: 'Consume human-verified coordinates, perform the interaction, confirm it landed',
-    lastModified: '2026-08-04',
+    lastModified: '2026-08-05',
     sitemapPriority: 1,
   },
   {
@@ -79,7 +79,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     navLabel: 'Automate desktop clicks',
     ogKicker: 'how-to',
     ogTitle: 'Automate desktop clicks on macOS, Windows, and Linux',
-    lastModified: '2026-08-04',
+    lastModified: '2026-08-05',
     sitemapPriority: 0.9,
   },
 ] as const

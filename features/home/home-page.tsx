@@ -92,14 +92,18 @@ export function HomePage() {
           <code>changed:panel</code> proves a region <em>stopped</em> matching, which is the
           question <code>verify</code> cannot answer: correlation is contrast-normalized, so a
           region that dims uniformly behind a modal still scores ~1.0 and still reads as matching.{' '}
-          <code>changed</code> compares RGB directly.
+          <code>changed</code> compares RGB directly. And because that comparison happens where the
+          session recorded the region, a region that merely <em>moved</em> would differ for the
+          wrong reason — so when something does differ, it spends one re-location to tell a change
+          from a departure, and refuses rather than claiming one it cannot stand behind.
         </p>
         <p className="max-w-2xl text-sm text-foreground/70 dark:text-foreground/55">
           The same report is appended to an audit log as the run goes — NDJSON under{' '}
-          <code>$XDG_STATE_HOME/pixelactions/</code>, on by default. Written step by step rather
-          than at the end, so a run the watchdog stopped or someone killed still says what it did
-          first. It never contains typed text, and nothing strips it: steps are recorded by their
-          summary, and a <code>type</code> summary is <code>type 26 chars</code>.
+          <code>$XDG_STATE_HOME</code>, <code>%LOCALAPPDATA%</code> on Windows, or{' '}
+          <code>~/.local/state</code>; <code>doctor</code> prints which. On by default. Written step
+          by step rather than at the end, so a run the watchdog stopped or someone killed still says
+          what it did first. It never contains typed text, and nothing strips it: steps are recorded
+          by their summary, and a <code>type</code> summary is <code>type 26 chars</code>.
         </p>
       </section>
       <section className="flex flex-col gap-4">
