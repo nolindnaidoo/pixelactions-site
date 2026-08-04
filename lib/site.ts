@@ -1,7 +1,7 @@
 // Canonical site + tool facts. Every page and metadata file reads from here —
 // no URL or version string is written twice.
 export const SITE_URL = 'https://pixelactions.dev'
-export const TOOL_VERSION = '0.4.0'
+export const TOOL_VERSION = '0.8.0'
 export const GITHUB_URL = 'https://github.com/nolindnaidoo/pixelactions'
 export const CRATES_URL = 'https://crates.io/crates/pixelactions'
 export const RELEASES_URL = 'https://github.com/nolindnaidoo/pixelactions/releases'

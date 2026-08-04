@@ -5,6 +5,7 @@ import { InstallBlock } from '@/components/install-block'
 import { JsonLd } from '@/components/json-ld'
 import { COMPETITORS } from '@/lib/competitors'
 import { CRATES_URL, GITHUB_URL, RELEASES_URL, SITE_URL, TAGLINE, TOOL_VERSION } from '@/lib/site'
+import { AgentSurface } from './agent-surface'
 import { FeatureLoop } from './feature-loop'
 import { Hero } from './hero'
 import { NonGoals } from './non-goals'
@@ -22,7 +23,10 @@ pixelactions plan --session <dir> click:email type:"a@b.com" key:enter verify:su
 pixelactions run  --session <dir> click:email type:"a@b.com" key:enter verify:success --yes
 # relocate → refuse if ambiguous → act → verify;  exit 0 done, 1 failed, 2 malformed, 3 refused
 
-pixelactions serve --session <dir>   # JSON per line on stdin/stdout — any language owns the loop`
+pixelactions serve --session <dir>   # JSON per line on stdin/stdout — any language owns the loop
+
+pixelactions mcp                     # read-only: a model can plan and find, but not act
+pixelactions mcp --yes               # ...and act. A model cannot pass this flag; you do`
 
 const RUN_REPORT = `{
   "schema": 1,
@@ -65,6 +69,7 @@ export function HomePage() {
         <CodeBlock ariaLabel="Sixty-second tour">{SIXTY_SECONDS}</CodeBlock>
       </section>
       <FeatureLoop />
+      <AgentSurface />
       <section className="flex flex-col gap-4">
         <h2 className="flex items-center gap-3 text-2xl font-semibold">
           <CoordChip ariaHidden tone="preview">
@@ -81,6 +86,20 @@ export function HomePage() {
           The honesty runs deep enough that <code>scroll</code> always reports <em>executed</em>,
           never <em>verified</em> — it changes its own region on purpose, so confirm it with a{' '}
           <code>wait_for</code> on whatever it should bring into view.
+        </p>
+        <p className="max-w-2xl text-sm text-foreground/70 dark:text-foreground/55">
+          To assert an outcome rather than an acceptance, name what should have moved.{' '}
+          <code>changed:panel</code> proves a region <em>stopped</em> matching, which is the
+          question <code>verify</code> cannot answer: correlation is contrast-normalized, so a
+          region that dims uniformly behind a modal still scores ~1.0 and still reads as matching.{' '}
+          <code>changed</code> compares RGB directly.
+        </p>
+        <p className="max-w-2xl text-sm text-foreground/70 dark:text-foreground/55">
+          The same report is appended to an audit log as the run goes — NDJSON under{' '}
+          <code>$XDG_STATE_HOME/pixelactions/</code>, on by default. Written step by step rather
+          than at the end, so a run the watchdog stopped or someone killed still says what it did
+          first. It never contains typed text, and nothing strips it: steps are recorded by their
+          summary, and a <code>type</code> summary is <code>type 26 chars</code>.
         </p>
       </section>
       <section className="flex flex-col gap-4">

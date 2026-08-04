@@ -61,9 +61,9 @@ export const PIXELACTIONS_CELLS: Record<RowKey, Cell> = {
     note: 'a pull request shows "click submit", not arithmetic',
   },
   languages: {
-    value: 'Any — JSON line protocol over stdio',
+    value: 'Any — JSON line protocol, or MCP',
     wins: true,
-    note: 'a 40-line stdlib Python client ships in the docs; no embedded interpreter, ever',
+    note: 'a 40-line stdlib Python client ships in the docs; an MCP server for models, gated on a flag they cannot pass; no embedded interpreter, ever',
   },
   relocation: {
     value: 'Every target re-located against a fresh capture before acting',

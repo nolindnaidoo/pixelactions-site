@@ -26,6 +26,11 @@ export const FAQ = [
       'Yes. pixelactions serve speaks a JSON line protocol on stdin/stdout — one request per line, one response back — so a program in any language owns the loop: branching, retries, data. A complete client is forty lines of stdlib Python, in the docs. There is no embedded interpreter, deliberately.',
   },
   {
+    question: 'Can an LLM or AI agent perform desktop actions safely?',
+    answer:
+      'pixelactions mcp serves the executor over the Model Context Protocol on stdio: a model gets three tools — plan a set of steps and see every coordinate, find where a region moved to, and act. Acting is off unless a human launched the server with --yes, which is a command-line flag a model cannot pass, so the consent stays with whoever wired the client. A refused or failed step comes back as an ordinary result with ok false rather than a protocol error, so the model reacts to it instead of retrying a tool that posts input. It acts only on regions a human marked in pixelcoords, re-locates each one before touching it, and records every run to a local audit log.',
+  },
+  {
     question: 'Is there a maintained alternative to PyAutoGUI?',
     answer:
       'Depends on the job. As of mid-2026, PyAutoGUI has not shipped a release since May 2023. The browser belongs to Playwright and Selenium; where an accessibility tree exists, a11y-first tools are more robust. For coordinate execution against human-marked regions — canvas apps, legacy software, streamed desktops — pixelactions is built for exactly that, on macOS, Windows, and Linux — both X11 and Wayland — today.',

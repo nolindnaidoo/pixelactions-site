@@ -1,6 +1,6 @@
 {
   "name": "pixelactions-site",
-  "version": "0.4.0",
+  "version": "0.8.0",
   "private": true,
   "description": "The promo and search site for pixelactions \u2014 consume human-verified coordinates, perform the interaction, confirm it landed.",
   "author": {

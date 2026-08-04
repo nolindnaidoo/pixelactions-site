@@ -30,7 +30,8 @@ export function InstallBlock({ variant }: { readonly variant: 'full' | 'compact'
         <div className="flex flex-col gap-2 text-sm text-foreground/70 dark:text-foreground/55">
           <p>
             Rust 1.88+ for the cargo route. pixelactions drives the pixelcoords binary for
-            capture-time work — install both:
+            capture-time work, and needs <strong>0.7.0 or newer</strong> — <code>doctor</code>{' '}
+            refuses an older one rather than failing mid-run. Install both:
           </p>
           <CodeBlock ariaLabel="Install both tools" copy="cargo install pixelcoords pixelactions">
             cargo install pixelcoords pixelactions

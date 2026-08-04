@@ -26,12 +26,12 @@ export const SITE_PAGES: readonly SitePage[] = [
     path: '/',
     title: 'pixelactions — Execute desktop flows from reviewable files: find, act, assert',
     description:
-      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, three surfaces: chained commands, TOML flow files, a JSON line protocol for any language. Free, MIT. macOS, Windows, and Linux (X11 and Wayland).',
+      'Run desktop automation against a pixelcoords session: click, type, and drag by label — every target re-located before acting, verified after, refused rather than guessed. One binary, four surfaces: chained commands, TOML flow files, a JSON line protocol for any language, and an MCP server a model can drive. Free, MIT. macOS, Windows, and Linux (X11 and Wayland).',
     headline: 'Consume human-verified coordinates',
     navLabel: 'Home',
     ogKicker: 'pixelactions',
     ogTitle: 'Consume human-verified coordinates, perform the interaction, confirm it landed',
-    lastModified: '2026-07-30',
+    lastModified: '2026-08-04',
     sitemapPriority: 1,
   },
   {
@@ -79,7 +79,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     navLabel: 'Automate desktop clicks',
     ogKicker: 'how-to',
     ogTitle: 'Automate desktop clicks on macOS, Windows, and Linux',
-    lastModified: '2026-07-30',
+    lastModified: '2026-08-04',
     sitemapPriority: 0.9,
   },
 ] as const

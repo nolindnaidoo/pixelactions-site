@@ -30,8 +30,8 @@ export function Hero() {
           {TAGLINE}
         </h1>
         <p className="font-mono text-sm text-foreground/70 dark:text-foreground/55">
-          click · double_click · drag · scroll · type · key · verify · wait_for · wait_gone · pause
-          — one vocabulary across three surfaces
+          click · double_click · drag · scroll · type · key · verify · changed · wait_for ·
+          wait_gone · pause — one vocabulary across four surfaces
         </p>
         <p className="max-w-2xl text-lg leading-8">
           <a
@@ -47,8 +47,9 @@ export function Hero() {
         </p>
         <p className="max-w-2xl font-mono text-sm text-foreground/70 dark:text-foreground/55">
           Status: early. The loop works end to end on macOS, Windows, and Linux — both X11 and
-          Wayland (GNOME and KDE). That is every platform this tool set out to cover. Published as v
-          {TOOL_VERSION} on crates.io.
+          Wayland (GNOME and KDE). That is every platform this tool set out to cover. A model can
+          drive it over MCP, and every run leaves an audit record. Published as v{TOOL_VERSION} on
+          crates.io.
         </p>
         <div className="flex flex-wrap gap-4 font-mono text-sm">
           <a
