@@ -62,18 +62,21 @@ export function PlatformTable() {
         been run on real hardware yet. This table is kept honest — claims match runs.
       </p>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        Those runs were 0.2.0 through 0.4.0. Five releases have shipped since — the pixelcoords
-        seam, <code>changed</code>, the audit log, the MCP surface, and a round of bug fixes — and
-        on Windows, X11 and Wayland none of them has been driven by hand. macOS has. They pass CI on
-        all four platforms and have headless tests, which is not the same thing, and this page will
-        say so until someone sits at each machine.
+        Those runs were 0.2.0 through 0.4.0. Nine releases have shipped since — the pixelcoords
+        seam, <code>changed</code>, the audit log, the MCP surface, and five rounds of bug fixes —
+        and on Windows, X11 and Wayland none of them has been driven by hand. macOS has. This page
+        will say so until someone sits at each machine.
       </p>
       <p className="text-sm text-foreground/70 dark:text-foreground/55">
-        One slice of that is automatic now: a scenario script runs in CI against a live X server and
-        checks that a marked region is located, that a click lands where the plan said, that a
-        cursor in a screen corner refuses the step, and that the audit log records a refused run. A
-        real X server and a real synthetic event — on a bare 1280×1024 virtual display with no
-        window manager, which is not a desktop.
+        Two slices of that are automatic now. A scenario script runs in CI against a live X server
+        and checks that a marked region is located, that a click lands where the plan said, that a
+        cursor in a screen corner refuses the step, and that the audit log records a refused run — a
+        real X server and a real synthetic event, on a bare 1280×1024 virtual display with no window
+        manager, which is not a desktop. And everything the tool does <em>other</em> than synthesise
+        input now runs against a real display on macOS, Windows and Linux every push: planning
+        against a session marked from a genuine capture, every verb, every settings key, the exit
+        codes, the refusals, the line protocol, and the agent tools. What neither can answer is
+        whether a click reached an application, and whether the permission model let it.
       </p>
     </section>
   )

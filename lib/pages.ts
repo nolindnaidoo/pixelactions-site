@@ -31,7 +31,7 @@ export const SITE_PAGES: readonly SitePage[] = [
     navLabel: 'Home',
     ogKicker: 'pixelactions',
     ogTitle: 'Consume human-verified coordinates, perform the interaction, confirm it landed',
-    lastModified: '2026-08-05',
+    lastModified: '2026-08-04',
     sitemapPriority: 1,
   },
   {
