@@ -1,0 +1,145 @@
+---
+import CodeBlock from '@/components/CodeBlock.astro'
+import ComparisonTable from '@/components/ComparisonTable.astro'
+import CoordChip from '@/components/CoordChip.astro'
+import InstallBlock from '@/components/InstallBlock.astro'
+import JsonLd from '@/components/JsonLd.astro'
+import { COMPETITORS } from '@/content/competitors'
+import {
+  CRATES_URL,
+  GITHUB_URL,
+  RELEASES_URL,
+  SITE_URL,
+  TAGLINE,
+  TOOL_VERSION,
+} from '@/content/site'
+import AgentSurface from '@/features/home/AgentSurface.astro'
+import FeatureLoop from '@/features/home/FeatureLoop.astro'
+import Hero from '@/features/home/Hero.astro'
+import NonGoals from '@/features/home/NonGoals.astro'
+import PlatformTable from '@/features/home/PlatformTable.astro'
+
+const SIXTY_SECONDS = `pixelcoords
+# a human freezes the screen, marks and labels regions
+# → Downloads/pixelcoords-captures/<timestamp>/  session.json + crops: the ground truth
+
+pixelactions doctor --probe
+# prove input permission — move the cursor 1px and back
+# a missing macOS grant makes event posting a SILENT no-op; the probe raises the dialog
+
+pixelactions plan --session <dir> click:email type:"a@b.com" key:enter verify:success
+# every coordinate after conversion, acts on nothing
+
+pixelactions run  --session <dir> click:email type:"a@b.com" key:enter verify:success --yes
+# relocate → refuse if ambiguous → act → verify;  exit 0 done, 1 failed, 2 malformed, 3 refused
+
+pixelactions serve --session <dir>
+# JSON per line on stdin/stdout — any language owns the loop
+
+pixelactions mcp
+# read-only: a model can plan and find, but not act
+pixelactions mcp --yes
+# ...and act. A model cannot pass this flag; you do`
+
+const RUN_REPORT = `{
+  "schema": 1,
+  "session": "/Users/you/Downloads/pixelcoords-captures/20260728-182121-117",
+  "executed": true,
+  "steps": [
+    { "index": 0, "summary": "click submit", "outcome": "verified",
+      "points": [{ "x": 430.0, "y": 170.0, "space": "logical", "monitor": 0, "scale": 2.0 }],
+      "elapsed_ms": 412 }
+  ]
+}`
+
+const SOFTWARE_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'pixelactions',
+  applicationCategory: 'DeveloperApplication',
+  operatingSystem: 'macOS, Windows, Linux',
+  softwareVersion: TOOL_VERSION,
+  description: TAGLINE,
+  license: 'https://opensource.org/license/mit/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@type': 'Person', name: 'nolindnaidoo', url: 'https://github.com/nolindnaidoo' },
+  url: SITE_URL,
+  downloadUrl: RELEASES_URL,
+  sameAs: [GITHUB_URL, CRATES_URL],
+}
+
+import Layout from '@/layouts/Layout.astro'
+---
+
+<Layout path="/">
+<div class="mx-auto flex w-full max-w-5xl flex-col gap-16 px-6 py-12 sm:py-16">
+      <Hero />
+      <section class="flex flex-col gap-4">
+        <h2 class="flex items-center gap-3 text-2xl font-semibold">
+          <CoordChip ariaHidden tone="preview">
+            60s
+          </CoordChip>
+          Sixty seconds
+        </h2>
+        <CodeBlock ariaLabel="Sixty-second tour">{SIXTY_SECONDS}</CodeBlock>
+      </section>
+      <FeatureLoop />
+      <AgentSurface />
+      <section class="flex flex-col gap-4">
+        <h2 class="flex items-center gap-3 text-2xl font-semibold">
+          <CoordChip ariaHidden tone="preview">
+            report
+          </CoordChip>
+          What a run reports
+        </h2>
+        <CodeBlock ariaLabel="A run report">{RUN_REPORT}</CodeBlock>
+        <p class="max-w-2xl text-sm text-foreground/70 dark:text-foreground/55">
+          <code>points</code> are the coordinates actually used, relocation corrections included —
+          where the click went, not where the session said it would. <code>outcome</code>{' '}
+          distinguishes <em>verified</em> from <em>executed</em>: the OS accepting an event is not
+          the app reacting to one, and “nothing errored” is not “it worked”.
+          The honesty runs deep enough that <code>scroll</code> always reports <em>executed</em>,
+          never <em>verified</em> — it changes its own region on purpose, so confirm it with a{' '}
+          <code>wait_for</code> on whatever it should bring into view.
+        </p>
+        <p class="max-w-2xl text-sm text-foreground/70 dark:text-foreground/55">
+          To assert an outcome rather than an acceptance, name what should have moved.{' '}
+          <code>changed:panel</code> proves a region <em>stopped</em> matching, which is the
+          question <code>verify</code> cannot answer: correlation is contrast-normalized, so a
+          region that dims uniformly behind a modal still scores ~1.0 and still reads as matching.{' '}
+          <code>changed</code> compares RGB directly. And because that comparison happens where the
+          session recorded the region, a region that merely <em>moved</em> would differ for the
+          wrong reason — so when something does differ, it spends one re-location to tell a change
+          from a departure, and refuses rather than claiming one it cannot stand behind.
+        </p>
+        <p class="max-w-2xl text-sm text-foreground/70 dark:text-foreground/55">
+          The same report is appended to an audit log as the run goes — NDJSON under{' '}
+          <code>$XDG_STATE_HOME</code>, <code>%LOCALAPPDATA%</code> on Windows, or{' '}
+          <code>~/.local/state</code>; <code>doctor</code> prints which. On by default. Written step
+          by step rather than at the end, so a run the watchdog stopped or someone killed still says
+          what it did first. It never contains typed text, and nothing strips it: steps are recorded
+          by their summary, and a <code>type</code> summary is <code>type 26 chars</code>.
+        </p>
+      </section>
+      <section class="flex flex-col gap-4">
+        <h2 class="flex items-center gap-3 text-2xl font-semibold">
+          <CoordChip ariaHidden tone="preview">
+            comparison
+          </CoordChip>
+          Where it stands
+        </h2>
+        <ComparisonTable competitors={COMPETITORS} linkCompetitors />
+      </section>
+      <NonGoals />
+      <PlatformTable />
+      <div class="flex flex-col gap-4">
+        <InstallBlock variant="full" />
+        <p class="max-w-2xl">
+          No account, no network surface, no daemon — one small native binary that runs, acts, and
+          exits. MIT-licensed, because the aim was to build the best executor in this category and
+          give it away.
+        </p>
+      </div>
+      <JsonLd data={SOFTWARE_JSON_LD} />
+    </div>
+</Layout>
