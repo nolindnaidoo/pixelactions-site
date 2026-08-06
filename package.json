@@ -21,7 +21,8 @@
     "lighthouse": "lhci autorun",
     "snapshots": "playwright test e2e/visual.e2e.ts --update-snapshots",
     "routes": "bun scripts/check-routes.ts",
-    "parity": "bun scripts/check-parity.ts"
+    "parity": "bun scripts/check-parity.ts",
+    "verify:deploy": "bun run lint && bun run typecheck && bun run test:coverage && bun run build && bun run routes && bun run budget"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
