@@ -1,0 +1,311 @@
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest'
+import { COMPETITORS } from '../src/content/competitors'
+import { SITE_PAGES } from '../src/content/pages'
+import { TOOL_VERSION } from '../src/content/site'
+import { card, touchIcon } from './build-og'
+import { BUDGETS, main as budgetMain, kb, walk } from './check-budget'
+import { main as driftMain, publishedVersion, staleStamps } from './check-content-drift'
+import { compare, extract, firstDifference, normalise, strip, visibleText } from './check-parity'
+import {
+  readCleanUrls,
+  readFormat,
+  readHosting,
+  resolves,
+  main as routesMain,
+} from './check-routes'
+
+/**
+ * The scripts are gates. Run once and seen to print a tick, they prove the
+ * happy path and nothing else — a budget that never fails
+ * that never detects a difference look exactly like a passing build.
+ */
+
+const scratch = mkdtempSync(join(tmpdir(), 'pixelcoords-scripts-'))
+afterAll(() => rmSync(scratch, { recursive: true, force: true }))
+
+function fakeBuild(files: Readonly<Record<string, number>>): string {
+  const root = mkdtempSync(join(scratch, 'dist-'))
+  for (const [relative, bytes] of Object.entries(files)) {
+    const full = join(root, relative)
+    mkdirSync(join(full, '..'), { recursive: true })
+    writeFileSync(full, 'x'.repeat(bytes))
+  }
+  return root
+}
+
+describe('check-budget', () => {
+  it('formats bytes as kilobytes', () => {
+    expect(kb(1024)).toBe('1.0 KB')
+    expect(kb(1536)).toBe('1.5 KB')
+  })
+
+  it('walks nested directories', () => {
+    expect([...walk(fakeBuild({ 'a.js': 10, 'n/b.css': 10, 'n/d/c.woff2': 10 }))]).toHaveLength(3)
+  })
+
+  it('passes under the ceilings', () => {
+    expect(budgetMain(fakeBuild({ 'app.js': 100, 'app.css': 100 }))).toBe(0)
+  })
+
+  it('fails over a ceiling', () => {
+    const js = BUDGETS.find(budget => budget.label === 'client JS')
+    expect(budgetMain(fakeBuild({ 'big.js': (js?.ceiling ?? 0) + 1 }))).toBe(1)
+  })
+
+  it('sums a class rather than checking the largest file', () => {
+    // Files under the ceiling individually can blow it together — the failure
+    // a per-file check would miss.
+    const css = BUDGETS.find(budget => budget.label === 'CSS')
+    const each = Math.ceil((css?.ceiling ?? 0) / 3)
+    expect(
+      budgetMain(fakeBuild({ 'a.css': each, 'b.css': each, 'c.css': each, 'd.css': each })),
+    ).toBe(1)
+  })
+
+  it('reports misuse when there is no build', () => {
+    expect(budgetMain(join(scratch, 'never-built'))).toBe(2)
+  })
+})
+
+describe('check-content-drift', () => {
+  afterEach(() => vi.unstubAllGlobals())
+
+  function stubFetch(handler: () => Response | Promise<Response>) {
+    vi.stubGlobal('fetch', vi.fn(handler))
+  }
+
+  it('reads the published version from crates.io', async () => {
+    stubFetch(() => new Response(JSON.stringify({ crate: { max_stable_version: '9.9.9' } })))
+    await expect(publishedVersion()).resolves.toEqual({ value: '9.9.9' })
+  })
+
+  it('reports a missing version rather than passing on undefined', async () => {
+    stubFetch(() => new Response(JSON.stringify({ crate: {} })))
+    expect((await publishedVersion()).error).toContain('no stable version')
+  })
+
+  it('reports a non-200 as an error', async () => {
+    stubFetch(() => new Response('nope', { status: 503 }))
+    expect((await publishedVersion()).error).toContain('503')
+  })
+
+  it('reports an unreachable host as an error', async () => {
+    stubFetch(() => Promise.reject(new Error('offline')))
+    expect((await publishedVersion()).error).toContain('unreachable')
+  })
+
+  it('fails when the site names a version crates.io does not have', async () => {
+    stubFetch(() => new Response(JSON.stringify({ crate: { max_stable_version: '0.0.1' } })))
+    await expect(driftMain()).resolves.toBe(1)
+  })
+
+  it('passes when the registry is unreachable', async () => {
+    // An outage says nothing about whether the content is honest.
+    stubFetch(() => Promise.reject(new Error('offline')))
+    await expect(driftMain()).resolves.toBe(0)
+  })
+
+  it('reports stale stamps without failing the build', async () => {
+    // A calendar item, not a defect — failing here would block a release that
+    // changed nothing about the claim.
+    stubFetch(() => new Response(JSON.stringify({ crate: { max_stable_version: TOOL_VERSION } })))
+    const written: string[] = []
+    const spy = vi.spyOn(process.stdout, 'write').mockImplementation((chunk: unknown) => {
+      written.push(String(chunk))
+      return true
+    })
+    await expect(driftMain(new Date('2030-01-01'))).resolves.toBe(0)
+    spy.mockRestore()
+    expect(written.join('')).toContain('re-verify')
+  })
+
+  it('flags a stamp past the re-verification interval', () => {
+    const distantFuture = new Date('2030-01-01')
+    expect(staleStamps(distantFuture)).toHaveLength(COMPETITORS.length)
+  })
+
+  it('leaves fresh stamps alone', () => {
+    const firstStamp = COMPETITORS[0]?.verifiedAgainst.date ?? '2026-07-28'
+    expect(staleStamps(new Date(firstStamp))).toHaveLength(0)
+  })
+})
+
+/**
+ * The gate that would have caught four pages 404ing in production. The cases
+ * below are the four combinations of the two settings that decide it, because
+ * the bug was not a wrong value — it was that nothing related the two.
+ */
+describe('check-routes', () => {
+  it('reads the format Astro is configured for, defaulting as Astro does', () => {
+    expect(readFormat("build: { format: 'file' }")).toBe('file')
+    expect(readFormat('build: { format: "file" }')).toBe('file')
+    expect(readFormat("build: { format: 'directory' }")).toBe('directory')
+    expect(readFormat('export default {}')).toBe('directory')
+  })
+
+  it('reads cleanUrls, defaulting as Vercel does', () => {
+    expect(readCleanUrls('{"cleanUrls": true}')).toBe(true)
+    expect(readCleanUrls('{"cleanUrls": false}')).toBe(false)
+    expect(readCleanUrls('{}')).toBe(false)
+  })
+
+  it('serves the root index whatever the settings', () => {
+    expect(resolves('/', { format: 'file', cleanUrls: false })).toBe('index.html')
+    expect(resolves('/', { format: 'directory', cleanUrls: false })).toBe('index.html')
+  })
+
+  it('resolves a directory build without needing cleanUrls', () => {
+    expect(resolves('/vs/pixelsnap', { format: 'directory', cleanUrls: false })).toBe(
+      'vs/pixelsnap/index.html',
+    )
+  })
+
+  it('resolves a file build only when cleanUrls is on', () => {
+    expect(resolves('/vs/pixelsnap', { format: 'file', cleanUrls: true })).toBe('vs/pixelsnap.html')
+    // The shipped bug, reproduced: a file build with cleanUrls off is a 404.
+    expect(resolves('/vs/pixelsnap', { format: 'file', cleanUrls: false })).toBeUndefined()
+  })
+
+  /** A build carrying an emitted file for every registry path. */
+  function builtPages(suffix: (path: string) => string): Record<string, number> {
+    return Object.fromEntries(
+      SITE_PAGES.map(page => [
+        page.path === '/' ? 'index.html' : suffix(page.path.replace(/^\//, '')),
+        10,
+      ]),
+    )
+  }
+
+  it('passes when every registry path has a file behind it', () => {
+    const build = fakeBuild(builtPages(bare => `${bare}.html`))
+    expect(routesMain(build, { format: 'file', cleanUrls: true })).toBe(0)
+  })
+
+  it('fails the whole shipped configuration, not just one route', () => {
+    // Exactly what production served: the files exist, the paths do not reach
+    // them. Everything but the root 404s.
+    const build = fakeBuild(builtPages(bare => `${bare}.html`))
+    expect(routesMain(build, { format: 'file', cleanUrls: false })).toBe(1)
+  })
+
+  it('fails when a registry entry has no emitted file at all', () => {
+    const build = fakeBuild({ 'index.html': 10 })
+    expect(routesMain(build, { format: 'file', cleanUrls: true })).toBe(1)
+  })
+
+  it('reads the real configs, which must agree with each other', () => {
+    // The repo's own settings — this is the assertion that would have failed
+    // before the fix, and it needs no build to do it.
+    const hosting = readHosting()
+    expect(resolves('/vs/pixelsnap', hosting)).toBeDefined()
+  })
+})
+
+/**
+ * The two pure builders in `build-og.ts`. Its `main` launches a browser, so
+ * the file stays outside the coverage scope — but these carry real invariants
+ * and the images they produce are the first thing anyone sees when a link is
+ * shared or the site is saved to a home screen.
+ */
+describe('build-og', () => {
+  it('inlines the vendored face rather than linking it', () => {
+    // A `<link>` to a font would resolve against nothing in `setContent`, and
+    // the card would silently render in a system face.
+    const html = card('data:font/woff2;base64,AAAA', 'KICKER', 'A title')
+    expect(html).toContain("src: url('data:font/woff2;base64,AAAA') format('woff2')")
+    expect(html).not.toMatch(/<link[^>]+font/i)
+  })
+
+  it('renders the kicker and title it is given', () => {
+    const html = card('data:font/woff2;base64,AAAA', 'COMPARISON', 'pixelcoords vs SikuliX')
+    expect(html).toContain('COMPARISON')
+    expect(html).toContain('pixelcoords vs SikuliX')
+  })
+
+  it('stamps the card with the version the site claims', () => {
+    expect(card('data:,', 'K', 'T')).toContain(`v${TOOL_VERSION}`)
+  })
+
+  it('builds the touch icon from the favicon, inlined', () => {
+    const svg = '<svg xmlns="http://www.w3.org/2000/svg"><rect fill="#00a0ff"/></svg>'
+    const html = touchIcon(svg)
+    const encoded = Buffer.from(svg).toString('base64')
+    expect(html).toContain(`data:image/svg+xml;base64,${encoded}`)
+  })
+
+  it('sizes the touch icon at what iOS asks for', () => {
+    // Anything else gets scaled and softened on the home screen.
+    const html = touchIcon('<svg/>')
+    expect(html).toContain('width: 180px')
+    expect(html).toContain('height: 180px')
+  })
+})
+
+describe('check-parity', () => {
+  it('strips markup, scripts and styles from the text', () => {
+    const html = '<p>one</p><script>ignored()</script><style>.x{}</style><p>two</p>'
+    expect(visibleText(html)).toBe('one two')
+  })
+
+  it('decodes the entities the two builds escape differently', () => {
+    // Next emits &#x27; where Astro emits a literal apostrophe.
+    expect(visibleText('<p>it&#x27;s</p>')).toBe("it's")
+    expect(visibleText('<p>it&#39;s</p>')).toBe("it's")
+    expect(visibleText('<p>a &amp;lt; b</p>')).toBe('a &lt; b')
+  })
+
+  it('collects outbound links and drops in-page anchors', () => {
+    const html = '<a href="/a">a</a><a href="#skip">s</a><a href="https://x.dev">x</a>'
+    expect(extract(html).links).toEqual(['/a', 'https://x.dev'])
+  })
+
+  it('treats a tag-boundary space as a note, not a failure', () => {
+    const next = extract('<p>v<span>2.6</span>,</p>')
+    const astro = extract('<p>v2.6,</p>')
+    const result = compare(next, astro)
+    expect(result.problems).toEqual([])
+    expect(result.notes[0]).toContain('whitespace')
+  })
+
+  it('fails on a real content difference', () => {
+    const result = compare(extract('<p>alpha</p>'), extract('<p>beta</p>'))
+    expect(result.problems.length).toBeGreaterThan(0)
+    expect(result.notes).toEqual([])
+  })
+
+  it('reports a missing link', () => {
+    const result = compare(extract('<a href="/gone">x</a>'), extract('<a href="/here">x</a>'))
+    expect(result.problems.some(p => p.includes('missing'))).toBe(true)
+    expect(result.problems.some(p => p.includes('added'))).toBe(true)
+  })
+
+  it('points at where two strings first diverge', () => {
+    expect(firstDifference('abcdef', 'abcXef')).toContain('at char 3')
+  })
+
+  it('applies the accepted differences', () => {
+    expect(normalise('a Switch to light theme Switch to dark theme b')).toBe('a b')
+    expect(normalise('x | looking for pixelcoords ? y')).toBe('x y')
+  })
+
+  it('compares characters ignoring whitespace', () => {
+    expect(strip(' a b\nc ')).toBe('abc')
+  })
+
+  it('does not end a tag at a > inside a quoted attribute', () => {
+    // `aria-label="pixelactions serve --session <dir> output"` broke the naive
+    // pattern: it closed the tag at the `>` of `<dir>` and spilled the rest of
+    // the attribute into the page text, reporting a difference that did not
+    // exist. Next escapes the brackets and Astro does not; both are valid.
+    const html = '<pre aria-label="serve --session <dir> output" class="x">body</pre>'
+    expect(visibleText(html)).toBe('body')
+  })
+
+  it('decodes the typographic entities the two builds disagree about', () => {
+    expect(visibleText('<p>&ldquo;quoted&rdquo;</p>')).toBe('"quoted"')
+    expect(visibleText('<p>a&mdash;b</p>')).toBe('a\u2014b')
+  })
+})
