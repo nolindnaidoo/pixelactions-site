@@ -17,9 +17,7 @@ const { variant } = Astro.props
         </CoordChip>
         Two ways in
       </h2>
-      <CodeBlock ariaLabel="Install command" copy="cargo install pixelactions">
-        cargo install pixelactions
-      </CodeBlock>
+      <CodeBlock ariaLabel="Install command" copy="cargo install pixelactions">{'cargo install pixelactions'}</CodeBlock>
       <p>
         Or skip the toolchain:{' '}
         <a
@@ -37,9 +35,7 @@ const { variant } = Astro.props
             capture-time work, and needs <strong>0.7.6 or newer</strong> — <code>doctor</code>{' '}
             refuses an older one rather than failing mid-run. Install both:
           </p>
-          <CodeBlock ariaLabel="Install both tools" copy="cargo install pixelcoords pixelactions">
-            cargo install pixelcoords pixelactions
-          </CodeBlock>
+          <CodeBlock ariaLabel="Install both tools" copy="cargo install pixelcoords pixelactions">{'cargo install pixelcoords pixelactions'}</CodeBlock>
           <p>
             macOS asks for an Accessibility grant on first run. The grant attaches to the terminal
             that launches pixelactions, not the binary — <code>doctor --probe</code> proves the
